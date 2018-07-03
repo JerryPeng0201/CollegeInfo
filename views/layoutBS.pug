@@ -8,7 +8,7 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     block head
   body
-    nav.navbar.navbar-expand-lg.navbar-light(style='background-color: #e3f2fd;')
+    nav#welcomePage.navbar.navbar-expand-lg.navbar-light.fixed-top
       a.navbar-brand(href='#') CollegeInfo
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
@@ -67,6 +67,14 @@ html
                       span.fa.fa-google-plus  Log in via Facebook
                 .modal-footer
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+    #carouselExampleSlidesOnly.carousel.slide(data-ride='carousel')
+      .carousel-inner
+        .carousel-item.active
+          img.d-block.w-100(src='./images/main.jpeg', alt='First slide')
+
+
+
 
 
 
