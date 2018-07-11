@@ -1,0 +1,33 @@
+extends layoutBS
+
+block content
+  .jumbotron
+  h1 Add Posts
+
+  form(method='post')
+    .form-group
+        label(for='posts') Item name
+        input(type="text" name='pname' placeholder='Enter Sale Item Name Here')#pname.form-control
+    .form-group
+        label(for='posts') Type
+        select(name='dorigin')#pname.form-control
+            option electronics
+            option household gadgets
+            option Alien organ
+            option sublight spaceships
+
+    .form-group
+        label(for='posts') Item price $
+        input(type="text" name='pprice' placeholder='Item price')#pname.form-control   
+         
+    .form-group
+        label(for='posts') Your descriptions
+        textarea(type='text' name='pdes' rows='3' placeholder='Be Subjective')#pname.form-control
+
+    .form-group
+        label(for='posts') Photo of your item
+        input(type='file' name='pphoto')#pname.form-control-file
+
+    input(type='submit' value="Submit your choice").btn.btn-primary 
+
+  
