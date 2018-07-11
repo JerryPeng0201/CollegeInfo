@@ -8,7 +8,7 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     block head
   body
-    nav#welcomePage.navbar.navbar-expand-lg.navbar-light.fixed-top
+    nav#welcomePage.navbar.navbar-expand-lg.navbar-light
       a.navbar-brand(href='#') CollegeInfo
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
@@ -18,26 +18,30 @@ html
             a.nav-link(href='#')
               | Home
               span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='#')
+              | About us
+              span.sr-only (current)
           li.nav-item.dropdown
             a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | School List
             .dropdown-menu(aria-labelledby='navbarDropdown')
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='http://www.brandeis.edu')
                 img.d-inline-block.align-top(src='./images/Brandeis.jpeg', width='20', height='20', alt='')
                 | &nbsp Brandeis University
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='http://www.bu.edu')
                 img.d-inline-block.align-top(src='./images/BU.jpeg', width='20', height='20', alt='')
                 | &nbsp Boston University
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='https://www.bc.edu')
                 img.d-inline-block.align-top(src='./images/BC.jpeg', width='20', height='20', alt='')
                 | &nbsp Boston College
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='https://www.harvard.edu')
                 img.d-inline-block.align-top(src='./images/Harvard.jpeg', width='20', height='20', alt='')
                 | &nbsp Harvard University
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='http://web.mit.edu')
                 img.d-inline-block.align-top(src='./images/MIT.jpeg', width='20', height='20', alt='')
                 | &nbsp Massachusetts Institute of Technology (MIT)
-              a.dropdown-item(href='#')
+              a.dropdown-item(href='https://www.tufts.edu')
                 img.d-inline-block.align-top(src='./images/Tufts.jpeg', width='20', height='20', alt='')
                 | &nbsp Tufts University
               .dropdown-divider
@@ -72,7 +76,6 @@ html
       .carousel-inner
         .carousel-item.active
           img.d-block.w-100(src='./images/main.jpeg', alt='First slide')
-
 
 
 
