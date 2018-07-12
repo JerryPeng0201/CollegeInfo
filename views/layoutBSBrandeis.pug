@@ -32,9 +32,16 @@ html
                 | Major/Minor Requirement
               a.dropdown-item(href='https://www.harvard.edu')
                 | Graduation Requirement
-          li.nav-item
-            a.nav-link(href='#')
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | Student's Market
+            .dropdown-menu(aria-labelledby='navbarDropdown')
+              a.dropdown-item(href='/addposts')
+                | Post Your Products
+              a.dropdown-item(href='/posts')
+                | Check Your Products
+              a.dropdown-item(href='#')
+                | Check the Market
           li.nav-item.dropdown
             a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | Group-Formation
@@ -48,10 +55,8 @@ html
         input.form-control.mr-sm-2(type='search', placeholder='Search', aria-label='Search')
         button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
         |&nbsp&nbsp
-        // Button trigger modal
-        button.btn.btn-primary(type='button')
-          | Log out
-
+        a.btn.btn-danger(href="/logout")
+          span.fa.fa-google-plus  Logout
 
 
 

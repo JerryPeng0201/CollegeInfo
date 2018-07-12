@@ -1,12 +1,13 @@
-extends layoutBS
+extends layoutBSLogin
 
 block content
   p &nbsp
-  .card(name='warning')
-    .card-header.bg-warning
-        | WARNING!
-    .card-body
-      h5.YOU YOU MUST LOG IN FIRST!!
-      p.According to our privacy policy, all information and data are private. You have to log in first before checking your data
-      a.btn.btn-danger(href="/auth/google")
-        span.fa.fa-google-plus  Log in via Google
+  .container
+    .card(name='warning')
+      .card-header.bg-warning
+          | WARNING!
+      .card-body
+        h5.YOU YOU MUST LOG IN FIRST!!
+        p According to our privacy policy, all information and data are private. You have to log in first before checking your data
+        a.btn.btn-danger(href="/auth/google")
+          span.fa.fa-google-plus  Log in via Google

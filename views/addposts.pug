@@ -1,4 +1,4 @@
-extends layoutBS
+extends layoutBSBrandeis
 
 block content
   .jumbotron
@@ -18,8 +18,8 @@ block content
 
     .form-group
         label(for='posts') Item price $
-        input(type="text" name='pprice' placeholder='Item price')#pname.form-control   
-         
+        input(type="text" name='pprice' placeholder='Item price')#pname.form-control
+
     .form-group
         label(for='posts') Your descriptions
         textarea(type='text' name='pdes' rows='3' placeholder='Be Subjective')#pname.form-control
@@ -28,6 +28,4 @@ block content
         label(for='posts') Photo of your item
         input(type='file' name='pphoto')#pname.form-control-file
 
-    input(type='submit' value="Submit your choice").btn.btn-primary 
-
-  
+    input(type='submit' value="Submit your choice").btn.btn-primary

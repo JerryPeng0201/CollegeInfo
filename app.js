@@ -19,15 +19,11 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var brandeisHomeRouter = require('./routes/BrandeisHome');
 var brandeisClassScheduleRouter = require('./routes/BrandeisClassSchedule');
-<<<<<<< HEAD
 var brandeisClassSearchRouter = require('./routes/BrandeisClassSearch');
-
-
-=======
 var addpostsRouter = require('./routes/addposts');
 var postsController = require('./controllers/postsController');
-const bodyParser = require("body-parser")
->>>>>>> 939a64fad93ac4ca8b350320ed8adbd3c166bec5
+
+
 var app = express();
 
 //Test whether the mongoose database can work
@@ -51,7 +47,6 @@ app.use(session({ secret: 'zzbbyanana' }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
-<<<<<<< HEAD
 //new code for authentication
 app.use(passport.initialize());
 app.use(passport.session());
@@ -144,34 +139,17 @@ app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 
-=======
-const
-mongoose = require( 'mongoose' );
-mongoose.connect( 'mongodb://localhost/shopat' );
-const 
-db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("we are connected!")
-});
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/BrandeisHome', brandeisHomeRouter);
-app.use('/BrandeisClassSchedule', brandeisClassScheduleRouter)
-
-app.get('/addposts', function(req,res){
-  console.log("adding posts")
-  res.render('addposts',{})
+app.get('/addposts', isLoggedIn,function(req,res){
+ console.log("adding posts")
+ res.render('addposts',{})
 });
-app.post('/addposts', postsController.savePosts)
-app.use('/addposts', addpostsRouter);
-app.get('/posts', postsController.getAllPosts );
-app.get('/posts/:id',
-        postsController.attachPdes,
-        postsController.getPdes)
-        
->>>>>>> 939a64fad93ac4ca8b350320ed8adbd3c166bec5
+app.post('/addposts', isLoggedIn, postsController.savePosts)
+//app.use('/addposts', isLoggedIn, addpostsRouter);
+app.get('/posts', isLoggedIn, postsController.getAllPosts );
+app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
