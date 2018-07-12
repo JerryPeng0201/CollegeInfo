@@ -1,0 +1,26 @@
+extends layoutBS
+
+block content
+  .jumbotron
+  h1 Sale Items
+
+
+  .flex-container 
+    each p in posts
+      div    
+            img(width="30%" src='https://images-na.ssl-images-amazon.com/images/I/81F93tgR0ML.jpg' alt='Card image cap')
+            h5 #{p.pname}
+            ul.list-group.list-group-flush
+              li.list-group-item #{p.porigin} Type
+              li.list-group-item $#{p.pprice}
+              if status=='admin'
+                //- a.btn.btn-primary(href='#') Delete
+                    h1 List of All Drinks
+                //- form(method="post" action="deleteDrinks")
+                //-   each d in drinks
+                //-         input(name="deleteName" value=drinks.name)
+                //-         e #{drinks.name} --
+                //-         i #{drinks.description}      
+                input(type='submit' value="Delete").btn.btn-primary
+          
+              a.btn.btn-primary(href="/posts/details/"+p._id) Details  
