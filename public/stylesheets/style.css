@@ -639,3 +639,13 @@ hp {
   padding: 2px;
   font-size: 14px;
 }
+
+.jumbotron{
+  background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
+  background-repeat: no-repeat;
+  background-color:transparent !important;
+  background-size: 708px 138px; 
+  background-size: contain;
+  padding: 80px;
+  margin: 25px;
+}
