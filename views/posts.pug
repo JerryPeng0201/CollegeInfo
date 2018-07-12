@@ -8,19 +8,18 @@ block content
   .flex-container
     each p in posts
       div
-            img(width="30%" src='https://images-na.ssl-images-amazon.com/images/I/81F93tgR0ML.jpg' alt='Card image cap')
-            h5 #{p.pname}
+            img(width="100%" src='http://www.macross2.net/m3/moremecha/swordfishii/swordfishii.gif' alt='Card image cap')
+            hp #{p.pname}
             ul.list-group.list-group-flush
-              li.list-group-item #{p.porigin} Type
-              li.list-group-item $#{p.pprice}
+              li.pli.list-group-item Type: #{p.porigin} 
+              li.pli.list-group-item $#{p.pprice}
               if status=='admin'
                 //- a.btn.btn-primary(href='#') Delete
-                    h1 List of All Drinks
-                //- form(method="post" action="deleteDrinks")
-                //-   each d in drinks
-                //-         input(name="deleteName" value=drinks.name)
-                //-         e #{drinks.name} --
-                //-         i #{drinks.description}
+                //- form(method="post" action="deletePosts")
+                //-   each p in posts
+                //-         input(name="deleteName" value=posts.name)
+                //-         e #{posts.name} --
+                //-         i #{posts.description}
                 input(type='submit' value="Delete").btn.btn-primary
 
               a.btn.btn-primary(href="/posts/details/"+p._id) Details

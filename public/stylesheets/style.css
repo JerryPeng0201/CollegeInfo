@@ -36,6 +36,11 @@ h5 {
   font-size: 1.5em;
 }
 
+hp {
+  padding: 0px;
+  font: 25px "Lucida Grande"
+}
+
 .cd-schedule {
   position: relative;
   margin: 2em 0;
@@ -613,4 +618,24 @@ h5 {
 .cd-schedule.modal-is-open .cover-layer {
   opacity: 1;
   visibility: visible;
+}
+
+/* For posts */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(255, 255, 255);
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  width: 250px;
+  margin: 20px;
+  text-align: center;
+  line-height: 70px;
+}
+
+.pli {
+  padding: 2px;
+  font-size: 14px;
 }
