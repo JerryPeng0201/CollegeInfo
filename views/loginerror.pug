@@ -1,4 +1,15 @@
-extends layoutBS
+extends layoutBSLogin
 
 block content
-  p You need to login first
+  p &nbsp
+  .container
+    .card(name='warning')
+      .card-header.bg-warning
+          | WARNING!
+      .card-body
+        h5.YOU YOU MUST LOG IN WITH BRANDEIS ACCOUNT!!!
+        p According to our privacy policy, all information and data are private.
+        p Only users who have officially enrolled in Brandeis University can use this Application
+        p Please Log in with your Brandeis account
+        a.btn.btn-danger(href="/auth/google")
+          span.fa.fa-google-plus  Log in via Google

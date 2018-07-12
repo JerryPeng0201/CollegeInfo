@@ -28,7 +28,7 @@ var app = express();
 
 //Test whether the mongoose database can work
 const mongoose = require( 'mongoose');
-mongoose.connect( 'mongodb://localhost/MemoryTrack' );
+mongoose.connect( 'mongodb://localhost:27017/CollegeInfo', {useNewUrlParser: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -43,7 +43,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({ secret: 'zzbbyanana' }));
+app.use(session({
+  secret: 'zzbbyanana',
+  resave: false,
+  saveUninitialized: true,
+}));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -51,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(passport_google_check)
 
 // here is where we check on their logged in status
 app.use((req,res,next) => {
@@ -58,16 +63,7 @@ app.use((req,res,next) => {
   if (req.isAuthenticated()){
     console.log("user has been Authenticated")
     res.locals.user = req.user
-    res.locals.loggedIn = true
-    if (req.user){
-      if (req.user.googleemail=='tjhickey@brandeis.edu'){
-        console.log("Owner has logged in")
-        res.locals.status = 'teacher'
-      } else {
-        console.log('student has logged in')
-        res.locals.status = 'student'
-      }
-    }
+    res.locals.loggedIn = true;
   }
   next()
 })
