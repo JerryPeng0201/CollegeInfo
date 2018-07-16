@@ -656,11 +656,7 @@ hp {
   font-size: 14px;
 }
 
-<<<<<<< HEAD
-.jumbotron#BrandeisClassSearch{
-=======
 .jumbotron#addposts{
->>>>>>> 3620d1d35a4d847e2834ccef4f0cc2761a646cdd
   background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
   background-repeat: no-repeat;
   background-color:transparent !important;
@@ -670,7 +666,6 @@ hp {
   margin: 25px;
 }
 
-<<<<<<< HEAD
 .jumbotron.text-center#classSearch{
   background-image: url(http://www.brandeis.edu/zeta/images/headerRightSeal.jpg);
   background-repeat: no-repeat;
@@ -680,9 +675,3 @@ hp {
   padding: 80px;
   margin: 2px;
 }
-=======
-.jumbotron#BrandeisClassSearch{
-  background-image: url(../images/BrandeisLogo.jpg);
-
-}
->>>>>>> 3620d1d35a4d847e2834ccef4f0cc2761a646cdd

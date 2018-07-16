@@ -85,7 +85,7 @@ exports.getPdes = ( req, res ) => {
 exports.attachPdes = ( req, res, next ) => {
   console.log('in attachPdes')
   const objId = new mongo.ObjectId(req.params.id)
-  Drinks.findOne(objId) //{"_id": objId})
+  Posts.findOne(objId) //{"_id": objId})
     .exec()
     .then( ( posts ) => {
       res.locals.posts = posts

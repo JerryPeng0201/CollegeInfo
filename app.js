@@ -22,7 +22,8 @@ var brandeisClassScheduleRouter = require('./routes/BrandeisClassSchedule');
 var brandeisClassSearchRouter = require('./routes/BrandeisClassSearch');
 var addpostsRouter = require('./routes/addposts');
 var postsController = require('./controllers/postsController');
-
+var contactsController = require('./controllers/contactsController');
+var teamRouter = require('./routes/team');
 
 var app = express();
 
@@ -135,7 +136,7 @@ app.use('/users', usersRouter);
 app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
-
+app.use('/team', teamRouter)
 
 app.get('/addposts', isLoggedIn,function(req,res){
  console.log("adding posts")
@@ -146,6 +147,12 @@ app.post('/addposts', isLoggedIn, postsController.savePosts)
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 
+//For contact us page
+app.get('/contacts', function(req,res){
+  console.log("adding contacts")
+  res.render('contacts',{})
+ });
+//  app.post('/contacts', contactsController.savePosts)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
