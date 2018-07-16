@@ -9,13 +9,13 @@ html
     block head
   body
     nav#welcomePage.navbar.navbar-expand-lg.navbar-light
-      a.navbar-brand(href='#')
+      a.navbar-brand(href='http://www.brandeis.edu')
         img.d-inline-block.align-top(src='./images/Brandeis.jpeg', width='30', height='30')
         | Brandeis
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
+        ul.navbar-nav.ml-auto
           li.nav-item
             a.nav-link(href='/BrandeisHome')
               | Home
@@ -52,9 +52,6 @@ html
                 | Class Group-Work
 
       form.form-inline.my-2.my-lg-0
-        input.form-control.mr-sm-2(type='search', placeholder='Search', aria-label='Search')
-        button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
-        |&nbsp&nbsp
         a.btn.btn-danger(href="/logout")
           span.fa.fa-google-plus  Logout
 

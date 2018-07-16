@@ -35,6 +35,7 @@ db.once('open', function() {
   console.log("we are connected!")
 });
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
