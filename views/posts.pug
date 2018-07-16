@@ -1,8 +1,13 @@
 extends layoutBSBrandeis
 
 block content
+<<<<<<< HEAD
   .jumbotron#BrandeisClassSearch
  
+=======
+  .jumbotron#addposts
+
+>>>>>>> 3620d1d35a4d847e2834ccef4f0cc2761a646cdd
 
 
   .flex-container
@@ -11,7 +16,7 @@ block content
             img(width="100%" src='http://www.macross2.net/m3/moremecha/swordfishii/swordfishii.gif' alt='Card image cap')
             hp #{p.pname}
             ul.list-group.list-group-flush
-              li.pli.list-group-item Type: #{p.porigin} 
+              li.pli.list-group-item Type: #{p.porigin}
               li.pli.list-group-item $#{p.pprice}
               if status=='admin'
                 //- a.btn.btn-primary(href='#') Delete
