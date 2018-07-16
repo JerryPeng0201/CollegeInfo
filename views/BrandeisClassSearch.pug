@@ -2,4 +2,8 @@ extends layoutBSBrandeis
 
 block content
 
-  P THIS IS CLASS SEARCH
+  .jumbotron.text-center#classSearch
+
+  form.form-inline.justify-content-center(method='GET' action="{% url 'search' %}")
+    input.form-control.mr-sm-2(name='query' type='text' placeholder='Class name or code')
+    button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Find Class

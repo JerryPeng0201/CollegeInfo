@@ -640,7 +640,7 @@ hp {
   font-size: 14px;
 }
 
-.jumbotron{
+.jumbotron#BrandeisClassSearch{
   background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
   background-repeat: no-repeat;
   background-color:transparent !important;
@@ -648,4 +648,14 @@ hp {
   background-size: contain;
   padding: 80px;
   margin: 25px;
+}
+
+.jumbotron.text-center#classSearch{
+  background-image: url(http://www.brandeis.edu/zeta/images/headerRightSeal.jpg);
+  background-repeat: no-repeat;
+  background-color:transparent !important;
+  background-size: 650px 108px; 
+  background-size: contain;
+  padding: 80px;
+  margin: 2px;
 }
