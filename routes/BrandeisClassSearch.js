@@ -65,16 +65,16 @@ router.get('/update_data', function(req, res){
                 const new_section = new Section(section);
                 new_section.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Section.update({_id: section._id}, section, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
@@ -86,24 +86,24 @@ router.get('/update_data', function(req, res){
           Course.findOne({id: data_obj.id}, function(err, course){
             console.log(data_obj.id)
             if(err){//Error Report
-              res.status(500);
-              res.json(err);
+              //res.status(500);
+              //res.json(err);
               return;
             } else {
               if(!course){//save new section data
                 const new_course = new Course(course);
                 new_course.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Course.update({_id: course._id}, course, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
@@ -115,24 +115,24 @@ router.get('/update_data', function(req, res){
           Subject.findOne({id: data_obj.id}, function(err, subject){
             console.log(data_obj.id)
             if(err){//Error Report
-              res.status(500);
-              res.json(err);
+              //res.status(500);
+              //res.json(err);
               return;
             } else {
               if(!subject){//save new section data
                 const new_subject = new Subject(subject);
                 new_subject.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Subject.update({_id: subject._id}, subject, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
@@ -144,24 +144,24 @@ router.get('/update_data', function(req, res){
           Term.findOne({id: data_obj.id}, function(err, term){
             console.log(data_obj.id)
             if(err){//Error Report
-              res.status(500);
-              res.json(err);
+              //res.status(500);
+              //res.json(err);
               return;
             } else {
               if(!term){//save new section data
                 const new_term = new Term(term);
                 new_term.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Term.update({_id: term._id}, term, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
@@ -173,24 +173,24 @@ router.get('/update_data', function(req, res){
           Instructor.findOne({id: data_obj.id}, function(err, instructor){
             console.log(data_obj.id)
             if(err){//Error Report
-              res.status(500);
-              res.json(err);
+              //res.status(500);
+              //res.json(err);
               return;
             } else {
               if(!instructor){//save new section data
                 const new_instructor = new Instructor(instructor);
                 new_instructor.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Instructor.update({_id: instructor._id}, instructor, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
@@ -202,24 +202,24 @@ router.get('/update_data', function(req, res){
           Requirement.findOne({id: data_obj.id}, function(err, requirement){
             console.log(data_obj.id)
             if(err){//Error Report
-              res.status(500);
-              res.json(err);
+              //res.status(500);
+              //res.json(err);
               return;
             } else {
               if(!requirement){//save new section data
                 const new_requirement = new Requirement(requirement);
                 new_requirement.save(function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
               } else {//update old section data
                 Requirement.update({_id: requirement._id}, requirement, function(err){
                   if(err){
-                    res.status(500);
-                    res.json(err);
+                    //res.status(500);
+                    //res.json(err);
                     return;
                   }
                 })
