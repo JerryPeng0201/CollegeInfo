@@ -3,22 +3,22 @@ const mongoose = require ('mongoose');
 var subjectSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
       type: String
     },
     term: {
       type: String,
-      required: true
+      //required: true
     },
     name: {
       type: String,
-      required: true
+      //required: true
     },
     abbreviation: {
       type: String,
-      required: true
+      //required: true
     },
     segments: [{
       id: String,

@@ -3,18 +3,18 @@ const mongoose = require ('mongoose');
 var courseSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
       type: String
     },
     term: {
       type: String,
-      required: true
+      //required: true
     },
     code: {
       type: String,
-      required: true
+      //required: true
     },
     subjects: [{
       id: String,
@@ -25,7 +25,7 @@ var courseSchema = mongoose.Schema( {
     },
     name: {
       type: String,
-      required: true
+      //required: true
     },
     description: {
       type: String
@@ -35,11 +35,11 @@ var courseSchema = mongoose.Schema( {
     },
     independent_study: {
       type: Boolean,
-      required: true
+      //required: true
     },
     requirements: {
       type: [String],
-      required: true
+      //required: true
     }
   } );
 
