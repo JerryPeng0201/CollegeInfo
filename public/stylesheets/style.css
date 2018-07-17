@@ -667,43 +667,8 @@ hp {
   font-size: 14px;
 }
 
-<<<<<<< HEAD
-.jumbotron#BrandeisClassSearch{
-=======
-.jumbotron#addposts{
->>>>>>> 3620d1d35a4d847e2834ccef4f0cc2761a646cdd
-  background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
-  background-repeat: no-repeat;
-  background-color:transparent !important;
-  background-size: 708px 138px;
-  background-size: contain;
-  padding: 80px;
-  margin: 25px;
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 519e69627c4ede92cd9acbe796e1407cf3659eb7
 .jumbotron.text-center#classSearch{
   background-image: url(http://www.brandeis.edu/zeta/images/headerRightSeal.jpg);
   background-repeat: no-repeat;
   background-color:transparent !important;
-<<<<<<< HEAD
-  background-size: 650px 108px;
-  background-size: contain;
-  padding: 80px;
-  margin: 2px;
 }
-=======
-.jumbotron#BrandeisClassSearch{
-  background-image: url(../images/BrandeisLogo.jpg);
-
-=======
-  background-size: 650px 108px; 
-  background-size: contain;
-  padding: 80px;
-  margin: 2px;
->>>>>>> 519e69627c4ede92cd9acbe796e1407cf3659eb7
-}
->>>>>>> 3620d1d35a4d847e2834ccef4f0cc2761a646cdd
