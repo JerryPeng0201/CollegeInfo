@@ -1,0 +1,18 @@
+.flex-container
+  .col-md-5
+    .form-area
+      form(role='form')
+        br(style='clear:both')
+        h3(style='margin-bottom: 25px; text-align: center;') Contact Form
+        .form-group
+          input#name.form-control(type='text' name='cname' placeholder='Name' required='')
+        .form-group
+          input#email.form-control(type='text' name='cemail' placeholder='Email' required='')
+        .form-group
+          input#mobile.form-control(type='text' name='cmobile' placeholder='Mobile Number' required='')
+        .form-group
+          input#subject.form-control(type='text' name='csubject' placeholder='Subject' required='')
+        .form-group
+          textarea#message.form-control(type='textarea' name='cmessage' placeholder='Message' maxlength='140' rows='7')
+          
+        input(type='submit' value="Submit").btn.btn-primary
