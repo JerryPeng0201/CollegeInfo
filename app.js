@@ -24,7 +24,7 @@ var addpostsRouter = require('./routes/addposts');
 var postsController = require('./controllers/postsController');
 var contactsController = require('./controllers/contactsController');
 var teamRouter = require('./routes/team');
-var termsRouter = require('./routes/terms');
+var footertermsRouter = require('./routes/footer-terms');
 
 var app = express();
 
@@ -138,7 +138,7 @@ app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.use('/team', teamRouter)
-app.use('/terms', termsRouter)
+app.use('/footer-terms', footertermsRouter)
 
 app.get('/addposts', isLoggedIn,function(req,res){
  console.log("adding posts")
