@@ -1,10 +1,23 @@
 extends layoutBSBrandeis
 
 block content
-  .jumbotron#BrandeisClassSearch
+  .jumbotron#classSearch
+    p1 Brandeis Class Search
+    p &nbsp
+    form(method='post')
+      .form-row.align-items-center
+        .col-auto.my-1
+          label Select a Term
+          select(name='termBar')#searchBar.term-bar.custom-select.mr-sm-2
+            each term in term_list
+              option(value= term.name) #{term.name}
 
-  .jumbotron.text-center#classSearch
+        .col-auto.my-1
+          label Select a Subject
+          select(name='subjectBar')#searchBar.sub-bar.custom-select.mr-sm-2
+            each subject in subject_list
+              option(value= subject.abbreviation) #{subject.name}
 
-  form.form-inline.justify-content-center(method='GET' action="{% url 'search' %}")
-    input.form-control.mr-sm-2(name='query' type='text' placeholder='Class name or code')
-    button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Find Class
+
+      p &nbsp
+      button.btn.btn-primary(type='submit') Search

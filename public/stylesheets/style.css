@@ -12,7 +12,6 @@ nav#welcomePage{
   background: white;
   font-size: 1.5em;
   height: 80px;
-  width: 1450px;
   margin-top: -40px;
 }
 
@@ -27,6 +26,12 @@ a.navbar-brand{
   margin-right: -50px;
 }
 
+#brandeisPage.carousel {
+  background: none;
+  margin-left: -50px;
+  margin-right: -50px;
+}
+
 h6 {
   font-size: 10em;
   font-weight: bold;
@@ -34,8 +39,14 @@ h6 {
   margin-top: -500px;
 }
 
+p1 {
+  font-size: 3em;
+  font-weight: bold;
+  font-family: serif;
+}
+
 a#welcomePageLogin.btn {
-  font-size: 2.6em;
+  font-size: 1.8em;
   margin-top: -400px;
 }
 
@@ -656,22 +667,8 @@ hp {
   font-size: 14px;
 }
 
-.jumbotron#addposts{
-  background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
-  background-repeat: no-repeat;
-  background-color:transparent !important;
-  background-size: 708px 138px;
-  background-size: contain;
-  padding: 80px;
-  margin: 25px;
-}
-
 .jumbotron.text-center#classSearch{
   background-image: url(http://www.brandeis.edu/zeta/images/headerRightSeal.jpg);
   background-repeat: no-repeat;
   background-color:transparent !important;
-  background-size: 650px 108px; 
-  background-size: contain;
-  padding: 80px;
-  margin: 2px;
 }

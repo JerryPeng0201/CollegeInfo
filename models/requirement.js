@@ -3,18 +3,18 @@ const mongoose = require ('mongoose');
 var requirementSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
       type: String
     },
     long: {
       type: String,
-      required: true
+      //required: true
     },
     short: {
       type: String,
-      required: true
+      //required: true
     }
   } );
 

@@ -3,9 +3,12 @@ const mongoose = require ('mongoose');
 var instructorSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
+      type: String
+    },
+    email: {
       type: String
     },
     first: {
@@ -15,8 +18,8 @@ var instructorSchema = mongoose.Schema( {
       type: String
     },
     last: {
-      type: String,
-      required: true
+      type: String
+      //required: true
     }
   } );
 

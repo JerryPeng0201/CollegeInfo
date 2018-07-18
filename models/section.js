@@ -3,25 +3,25 @@ const mongoose = require ('mongoose');
 var sectionSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
       type: String
     },
     course: {
       type: String,
-      required: true
+      //required: true
     },
     section: {
       type: String,
-      required: true
+      //required: true
     },
     details: {
       type: String
     },
     status: {
       type: String,
-      required: true
+      //required: true
     },
     enrolled: {
       type: Number
@@ -34,7 +34,7 @@ var sectionSchema = mongoose.Schema( {
     },
     instructors: {
       type: [String],
-      required: true
+      //required: true
     },
     times: {
       type: [{
@@ -44,11 +44,11 @@ var sectionSchema = mongoose.Schema( {
           type: [String],
           enum:['su', 'm', 'tu', 'w', 'th', 'f', 'sa']
         },
-        type: String,
+        timeType: String,
         building: String,
         room: String
       }],
-      required: true
+      //required: true
     }
   } );
 

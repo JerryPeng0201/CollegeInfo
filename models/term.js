@@ -3,22 +3,22 @@ const mongoose = require ('mongoose');
 var termSchema = mongoose.Schema( {
     id: {
       type: String,
-      required: true
+      //required: true
     },
     comment: {
       type: String
     },
     name: {
       type: String,
-      required: true
+      //required: true
     },
     start: {
       type: String,
-      required: true
+      //required: true
     },
     end: {
       type: String,
-      required: true
+      //required: true
     }
   } );
 
