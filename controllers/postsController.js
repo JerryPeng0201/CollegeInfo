@@ -2,6 +2,19 @@
 const Posts = require( '../models/posts' );
 console.log("loading the posts Controller")
 
+exports.myPosts = (req, res) => {
+  Posts.find({pid: req.user._id}, function(err, post_list){
+    if(err){
+
+    } else {
+      if(post_list.length == 0){
+        res.json({err: "Not found."})
+      } else {
+        res.render('myPosts', {posts: post_list});
+      }
+    }
+  })
+}
 
 exports.getAllPosts = ( req, res ) => {
 
@@ -28,7 +41,8 @@ exports.savePosts = ( req, res ) => {
     pname: req.body.pname,
     pdes: req.body.pdes,
     porigin: req.body.porigin,
-    pprice: req.body.pprice
+    pprice: req.body.pprice,
+    pid: req.user._id,
   } )
 
   console.log("posts = "+newPosts)

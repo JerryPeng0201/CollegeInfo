@@ -694,3 +694,17 @@ hp {
   background-repeat: no-repeat;
   background-color:transparent !important;
 }
+
+.jumbotron#addposts{
+  background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
+  background-repeat: no-repeat;
+  background-color:transparent !important;
+  background-size: 690px 108px; 
+  background-size: contain;
+  padding: 75px;
+  margin: 25px;
+  } 
+
+.btn.btn-primary{
+  margin: 4px;
+}

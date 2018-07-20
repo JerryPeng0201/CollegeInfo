@@ -24,7 +24,7 @@ var addpostsRouter = require('./routes/addposts');
 var postsController = require('./controllers/postsController');
 var contactsController = require('./controllers/contactsController');
 var teamRouter = require('./routes/team');
-var termsRouter = require('./routes/terms');
+var footertermsRouter = require('./routes/footer-terms');
 
 var app = express();
 
@@ -139,7 +139,7 @@ app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.use('/team', teamRouter)
-app.use('/terms', termsRouter)
+app.use('/footer-terms', footertermsRouter)
 
 app.get('/addposts', isLoggedIn,function(req,res){
  console.log("adding posts")
@@ -149,13 +149,14 @@ app.post('/addposts', isLoggedIn, postsController.savePosts)
 //app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
+app.get('/myposts', isLoggedIn, postsController.myPosts);
 
 //For contact us page
 app.get('/contacts', function(req,res){
   console.log("adding contacts")
   res.render('contacts',{})
  });
-//  app.post('/contacts', contactsController.savePosts)
+// app.get('/contacts', contactsController.savePosts)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

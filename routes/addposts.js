@@ -13,4 +13,4 @@ router.post('/', function(req, res, next) {
   console.log(req.body.pprice);
   res.render('addposts', { title: 'Student Market' });
 });
-module.exports = router;
+
