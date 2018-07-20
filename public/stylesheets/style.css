@@ -13,6 +13,28 @@ nav#welcomePage{
   font-size: 1.5em;
   height: 80px;
   margin-top: -40px;
+  font-family: serif;
+}
+
+#exampleModal {
+  font-family: serif;
+  font-size: 1.5em;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
 
 a.navbar-brand{

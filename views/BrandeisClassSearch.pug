@@ -1,5 +1,9 @@
 extends layoutBSBrandeis
 
+block head
+  script(src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
+  script(src="/javascripts/BrandeisClassSearch.js")
+
 block content
   .jumbotron#classSearch
     p1 Brandeis Class Search
@@ -10,14 +14,65 @@ block content
           label Select a Term
           select(name='termBar')#searchBar.term-bar.custom-select.mr-sm-2
             each term in term_list
-              option(value= term.name) #{term.name}
+              option(value= term.id) #{term.name}
 
         .col-auto.my-1
           label Select a Subject
           select(name='subjectBar')#searchBar.sub-bar.custom-select.mr-sm-2
             each subject in subject_list
-              option(value= subject.abbreviation) #{subject.name}
+              option(value= subject.id.substring(subject.id.indexOf("-") + 1)) #{subject.name}
 
 
       p &nbsp
-      button.btn.btn-primary(type='submit') Search
+      input(type="submit")
+
+  if course_list
+      p List of All course
+      table#mytable.table.table-bordered.table-hover
+        thead.thead-light
+          tr
+            th#host-1
+              | Course Code
+              span(style='display: none') some hidden data form host 1
+            th#host-2
+              | Course Title
+              span(style='display: none') some hidden data form host 2
+            th#host-3
+              | Course Requirement
+              span(style='display: none') some hidden data form host 3
+            th#host-4
+              | Independent Study
+              span(style='display: none') some hidden data form host 4
+        tbody
+          each course in course_list
+            tr.course_box(course_description=course.description course_title=course.name)
+              td
+                p #{course.code}
+              td
+                p #{course.name}
+              td
+                p #{course.requirements}
+              td
+                p #{course.independent_study}
+
+  // Modal
+  #exampleModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#exampleModalLabel.modal-title Class Information
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+
+          p
+            b Title
+          p.course-title <>
+
+          p
+            b Description
+          p.course-description <>
+
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Save changes
