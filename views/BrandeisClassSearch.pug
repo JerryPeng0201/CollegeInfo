@@ -1,7 +1,6 @@
 extends layoutBSBrandeis
 
 block head
-  script(src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
   script(src="/javascripts/BrandeisClassSearch.js")
 
 block content
@@ -24,7 +23,7 @@ block content
 
 
       p &nbsp
-      input(type="submit")
+      button.btn.btn-primary(type='submit') Search
 
   if course_list
       p List of All course
@@ -43,9 +42,10 @@ block content
             th#host-4
               | Independent Study
               span(style='display: none') some hidden data form host 4
+
         tbody
           each course in course_list
-            tr.course_box(course_description=course.description course_title=course.name)
+            tr.course_box(course_description=course.description, course_title=course.name, course_code=course.id)
               td
                 p #{course.code}
               td
@@ -55,9 +55,10 @@ block content
               td
                 p #{course.independent_study}
 
+
   // Modal
   #exampleModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
-    .modal-dialog(role='document')
+    #exampleModalDialog.modal-dialog.modal-lg(role='document')
       .modal-content
         .modal-header
           h5#exampleModalLabel.modal-title Class Information
@@ -73,6 +74,56 @@ block content
             b Description
           p.course-description <>
 
+          hr
+
+          p
+            b Section Information
+
+          table#sectiontable.table.table-bordered.table-hover
+            thead.thead-light
+              tr
+                th
+                  | Total Sections
+                th
+                  | Instructors
+                th
+                  | Status
+                th
+                  | Limit
+                th
+                  | Enrolled
+                th
+                  | Waiting
+                th
+                  | Schedule
+                th
+                  |Location
+            tbody
+              tr
+                td
+                  p.course-section Loading...
+                td
+                  p.course-instructors Loading...
+                td
+                  p.course-status Loading...
+                td
+                  p.course-limit Loading ...
+                td
+                  p.course-enrolled Loading...
+                td
+                  p.course-waiting Loading...
+                td
+                  p.course-date TBD
+                  p.course-start TBD
+                  p.course-end TBD
+                td
+                  p
+                    b Building:
+                  p.course-building TBD
+                  p
+                    b Room:
+                  p.course-room TBD
+
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='button') Save changes
+          button.btn.btn-primary(type='submit') Add to My Schedule

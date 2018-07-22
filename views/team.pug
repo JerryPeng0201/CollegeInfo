@@ -2,32 +2,63 @@ extends layoutBS
 
 block content
 
+  #welcomePage.carousel.slide.text-entered(data-ride='carousel')
+    .carousel-inner
+      .carousel-item.active
+        img.d-block.w-100(src='./images/background1.jpg', alt='First slide')
+
+  p &nbsp
+  hr
+  p &nbsp
   .container
-      p &nbsp
-      .form-row
-        .col-lg-4
-          .card#welcomePage
-            img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
-            .card-body
-              h5.card-title Jerry Peng
-              p.card-text
-                | I'm awesome
+    .row.featurette
+      .col-md-7
+        h2.featurette-heading
+          | Jierui Peng
+        #teamIN.p.lead
+          | I am from Jinan, China. I am a sophomore at Brandeis University majoring in computer science. I am especially interested in artificial intelligence. My interests include traveling, writing, kayaking, hiking, and watching movies. I also really love spending time with my amazing girlfriend.
+      .col-md-5
+        img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
 
-        .col-lg-4
-          .card#welcomePage
-            img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
-            .card-body
-              h5.card-title Jialin Zhou
-              p.card-text
-                | I'm awesome
+    p &nbsp
+    hr
+    p &nbsp
 
-        .col-lg-4
-          .card#welcomePage
-            img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
-            .card-body
-              h5.card-title Xuxin Zhang
-              p.card-text
-                | I'm awesome
+    .row.featurette
+      .col-md-7.order-md-2
+        h2.featurette-heading
+          | Jialin Zhou
+        #teamIN.p.lead
+          | Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.
+      .col-md-5.order-md-1
+        img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
 
-  h5 Description
-  p Our team is awesome
+
+    p &nbsp
+    hr
+    p &nbsp
+
+    .row.featurette
+      .col-md-7
+        h2.featurette-heading
+          | Xuxin Zhang
+        #teamIN.p.lead
+          | I'm awesome!
+      .col-md-5
+        img.rounded-circle.rounded.mx-auto.d-block(src='https://media1.popsugar-assets.com/files/thumbor/TXZOZ8Y748Em-OxtfuJKpYW8deA/160x160/filters:format_auto-!!-:strip_icc-!!-:sharpen-!1,0,true!-/2016/10/17/977/n/1922398/12720afe014ba434_GettyImages-615190902/i/Leonardo-DiCaprio-Before-Flood-Premiere-Paris-2016.jpg', alt='Card image cap', width='200', height='200')
+
+
+  .container
+    footer#welcomePage.pt-4.my-md-5.pt-md-5.border-top
+        .row
+          .col-6.col-md
+            img.mb-2(src='https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg', alt='', width='24', height='24')
+            small.d-block.mb-3.text-muted &copy; 2017-2022
+
+
+          .col-6.col-md
+            a.text-muted(href='footer-terms') Terms
+          .col-6.col-md
+            a.text-muted(href='team') About us
+          .col-6.col-md
+            a.text-muted(href='contacts') Contact us

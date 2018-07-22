@@ -16,9 +16,26 @@ nav#welcomePage{
   font-family: serif;
 }
 
+h2 {
+  font-size: 2.5em;
+  font-family: serif;
+  font-weight: bold;
+}
+
+#teamIN.p {
+  font-size: 1.5em;
+  font-family: serif;
+}
+
 #exampleModal {
   font-family: serif;
   font-size: 1.5em;
+}
+
+
+table#sectiontable {
+  font-size: 0.8em;
+  font-family: serif;
 }
 
 table {
@@ -44,7 +61,7 @@ a.navbar-brand{
 
 #welcomePage.carousel {
   background: none;
-  margin-left: -40px;
+  margin-left: -50px;
   margin-right: -50px;
 }
 
@@ -58,7 +75,7 @@ h6 {
   font-size: 10em;
   font-weight: bold;
   font-family: serif;
-  margin-top: -500px;
+  margin-top: -40%;
 }
 
 p1 {
@@ -69,7 +86,7 @@ p1 {
 
 a#welcomePageLogin.btn {
   font-size: 1.8em;
-  margin-top: -400px;
+  margin-top: -30%;
 }
 
 
@@ -699,11 +716,11 @@ hp {
   background-image: url(https://www2.le.ac.uk/offices/careers-new/images/logos/Student-Market-Place-image.png);
   background-repeat: no-repeat;
   background-color:transparent !important;
-  background-size: 690px 108px; 
+  background-size: 690px 108px;
   background-size: contain;
   padding: 75px;
   margin: 25px;
-  } 
+  }
 
 .btn.btn-primary{
   margin: 4px;

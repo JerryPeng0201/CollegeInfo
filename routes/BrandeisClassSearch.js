@@ -49,7 +49,7 @@ router.post('/', function(req, res, next){
       Subject.find({'term':'1043'}, 'id name abbreviation', callback);
     },
     course_list: function(callback){
-      Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}}, 'name requirements description code independent_study', callback);
+      Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}}, 'name requirements description code independent_study id', callback);
     }
   }, function(err, results){
     if(err){
@@ -248,5 +248,7 @@ router.get('/update_data', function(req, res, next){
     console.log("Error: " + err.message);
   });
 });
+
+
 
 module.exports = router;
