@@ -8,14 +8,14 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     block head
   body
-    nav#welcomePage.navbar.navbar-expand-lg.navbar-light.col-lg-10
-      a.navbar-brand(href='') CollegeInfo
+    nav#welcomePage.navbar.navbar-expand-lg.navbar-light.col-lg-11
+      a.navbar-brand(href='/') CollegeInfo
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
         ul.navbar-nav.ml-auto
           li.nav-item
-            a.nav-link(href='#')
+            a.nav-link(href='/')
               | Home
               span.sr-only (current)
           li.nav-item.dropdown
@@ -36,7 +36,7 @@ html
                 | &nbsp Harvard University
               a.dropdown-item(href='http://web.mit.edu')
                 img.d-inline-block.align-top(src='./images/MIT.jpeg', width='20', height='20', alt='')
-                | &nbsp Massachusetts Institute of Technology (MIT)
+                | &nbsp Massachusetts Institute of Technology
               a.dropdown-item(href='https://www.tufts.edu')
                 img.d-inline-block.align-top(src='./images/Tufts.jpeg', width='20', height='20', alt='')
                 | &nbsp Tufts University
@@ -44,15 +44,7 @@ html
               a.dropdown-item(href='#') Something else here
 
 
-    #welcomePage.carousel.slide(data-ride='carousel')
-      .carousel-inner
-        .carousel-item.active
-          img.d-block.w-100(src='./images/background1.jpg', alt='First slide')
-        .carousel-caption
-          h6 CollegeInfo
-        .carousel-caption
-          a#welcomePageLogin.btn.btn-danger(href="/auth/google")
-           span.fa.fa-google-plus  Log in via Google
+
 
 
 

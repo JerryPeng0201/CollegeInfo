@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 
+
 //codes for authentication
 // here we set up authentication with passport
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -25,6 +26,7 @@ var postsController = require('./controllers/postsController');
 var contactsController = require('./controllers/contactsController');
 var teamRouter = require('./routes/team');
 var footertermsRouter = require('./routes/footer-terms');
+var api_controller = require('./controllers/api.js');
 
 var app = express();
 
@@ -35,7 +37,7 @@ mongoose.connect( mongoDB, {useNewUrlParser: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("we are connected!")
+  console.log("Database Connection Normal")
 });
 
 
@@ -138,6 +140,7 @@ app.use('/users', usersRouter);
 app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
+app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
 

@@ -16,23 +16,52 @@ var ClassSearch = require('../models/classSearch');
 router.get('/', function(req, res, next) {
   async.parallel({
     term_list: function(callback){
-      Term.find({}, 'name', callback);
+      Term.find({}, 'id name', callback);
     },
     subject_list: function(callback){
-      Subject.find({}, 'name abbreviation', callback);
-    },
-    req_list: function(callback){
-      Requirement.find({}, 'short', callback)
+      Subject.find({'term': '1043'}, 'id name', callback);
     }
   }, function(err, results){
     if(err){
       next(err)
-    } else {
-      res.render('BrandeisClassSearch', { title: 'Brandeis', term_list: results.term_list ,subject_list: results.subject_list, req_list: results.req_list});
+    } else {/*
+      //create a list of unique subjects
+      const all_subs = results.subject_list;
+      const unique_sub_list = [];
+      for(var i = 0; i < all_subs.length; i++){
+
+      }*/
+      res.render('BrandeisClassSearch', { title: 'Brandeis', term_list: results.term_list ,subject_list: results.subject_list});
     }
   })
 });
 
+router.post('/', function(req, res, next){
+  //onsole.log(req.body);
+  const dept_code = req.body.subjectBar;
+  const dept_regex = new RegExp(dept_code+"$")
+
+  async.parallel({
+    term_list: function(callback){
+      Term.find({}, 'id name', callback);
+    },
+    subject_list: function(callback){
+      Subject.find({'term':'1043'}, 'id name abbreviation', callback);
+    },
+    course_list: function(callback){
+      Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}}, 'name requirements description code independent_study id', callback);
+    }
+  }, function(err, results){
+    if(err){
+      next(err)
+    }else{
+      console.log("dept_regex:" + dept_regex)
+      console.log("Results: "+results.course_list)
+      //console.log("Class Name: "+results.course_list)
+      res.render('BrandeisClassSearch', {title: 'Brandeis', term_list: results.term_list ,subject_list: results.subject_list, course_list: results.course_list});
+    }
+  })
+});
 // The use can't access the database so this webpage is for updating
 router.get('/update_data', function(req, res, next){
   const secret = req.query.secret;
@@ -50,9 +79,11 @@ router.get('/update_data', function(req, res, next){
   }
 
   const function_list = [];
-
+  /* Old Database(2004-2016)
+   * http://registrar-prod-rhel6.unet.brandeis.edu/export/export-2004-2016.json
+   */
   // Deploy the API, connect to the Brandeis class data
-  http.get('http://registrar-prod-rhel6.unet.brandeis.edu/export/export-2004-2016.json', (resp) => {
+  http.get('http://registrar-prod-rhel6.unet.brandeis.edu/export/export.json', (resp) => {
     let data = '';
 
     // A chunk of data has been recieved.
@@ -217,5 +248,7 @@ router.get('/update_data', function(req, res, next){
     console.log("Error: " + err.message);
   });
 });
+
+
 
 module.exports = router;
