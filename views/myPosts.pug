@@ -22,7 +22,7 @@ block content
                 //-         e #{posts.name} --
                 //-         i #{posts.description}
               input(type='submit' value="Delete").btn.btn-primary
-              button.btn.btn-primary.detail-button(title=p.pname)
+              button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
 
   #exampleModalLong.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle' aria-hidden='true')
