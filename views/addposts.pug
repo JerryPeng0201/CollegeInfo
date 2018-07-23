@@ -3,6 +3,23 @@ extends layoutBSBrandeis
 block content
   .jumbotron#addposts
 
+  form(method='post')
+    .form-group
+        label(for='posts') Item name
+        input(type="text" name='pname' placeholder='Enter Sale Item Name Here')#pname.form-control
+    .form-group
+        label(for='posts') Type
+        select(name='porigin')#pname.form-control
+            option Apparel / Clothing
+            option Art / Office Supplies
+            option Computer Products
+            option Electronics gadgets
+            option Furniture
+            option Household gadgets
+            option Health / Beauty
+            option PlayStation/ Xbox Games
+            option Sublight spaceships
+
   .container
     form(method='post')
       .form-group
