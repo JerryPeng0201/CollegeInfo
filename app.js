@@ -27,6 +27,7 @@ var contactsController = require('./controllers/contactsController');
 var teamRouter = require('./routes/team');
 var footertermsRouter = require('./routes/footer-terms');
 var api_controller = require('./controllers/api.js');
+var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
 
 var app = express();
 
@@ -143,6 +144,7 @@ app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
+app.use('/BrandeisMajorSearch', brandeisMajorSearchRouter)
 
 app.get('/addposts', isLoggedIn,function(req,res){
  console.log("adding posts")

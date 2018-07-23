@@ -16,6 +16,10 @@ nav#welcomePage{
   font-family: serif;
 }
 
+#navbarHead.p {
+  font-size: 1.5em;
+}
+
 h2 {
   font-size: 2.5em;
   font-family: serif;

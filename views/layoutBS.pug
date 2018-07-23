@@ -9,7 +9,9 @@ html
     block head
   body
     nav#welcomePage.navbar.navbar-expand-lg.navbar-light.col-lg-11
-      a.navbar-brand(href='/') CollegeInfo
+      a.navbar-brand(href='#')
+        img.d-inline-block.align-top(src='./images/logo1.jpg', width='60', height='50', alt='')
+      #navbarHead.p CollegeInfo
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
@@ -42,11 +44,6 @@ html
                 | &nbsp Tufts University
               .dropdown-divider
               a.dropdown-item(href='#') Something else here
-
-
-
-
-
 
 
 
