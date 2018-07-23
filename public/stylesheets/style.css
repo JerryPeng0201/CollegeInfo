@@ -667,6 +667,11 @@ hp {
   font-size: 14px;
 }
 
+.pliB {
+  padding: 2px;
+  font-size: 20px;
+}
+
 .jumbotron.text-center#classSearch{
   background-image: url(http://www.brandeis.edu/zeta/images/headerRightSeal.jpg);
   background-repeat: no-repeat;
