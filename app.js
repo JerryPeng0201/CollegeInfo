@@ -142,6 +142,7 @@ app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
+app.post('/add_section_to_schedule', isLoggedIn, api_controller.add_section_to_schedule)
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
 app.use('/BrandeisMajorSearch', brandeisMajorSearchRouter)

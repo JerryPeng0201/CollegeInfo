@@ -1,22 +1,44 @@
 $(document).ready(function(){
 
-  let course_section = "";
-  let course_title = "";
-  let course_description = "";
+  //let course_section = "";
+  //let course_title = "";
+  //let course_description = "";
 
-  $('#addClass').on('click', function(event){
-    console.log("clicked!");
-    console.log("section: " + course_section);
-    console.log("description: " + course_description);
-    console.log("title: " + course_title);
+  $('#sectionDetail detail-tr').on('click', function(event){
+    console.log("addclass is clicked!");
+    console.log(event.currentTarget);
+
+    //const section_id = ;
+
+    $.ajax({
+      url: "/add_section_to_schedule/",
+      type: "POST",
+      data: {
+        section_id: section_id
+      },
+      dataType: 'json',
+      success: function(data){
+        for(i=0; i<data.text.length; i++){
+          $('#exampleTable .courseTitle').text(data.text[i]);
+        }
+
+        window.alert("Section added successfully.")
+      }
+    })
   })
+
+  $("#exampleModal").on('show.bs.modal', function (e) {
+    $("#sectionDetail tr.loading").css("display", "block");
+  })
+
+
 
   $("#mytable tr.course_box").on('click', function(event){
     console.log($(event.currentTarget));
-    course_description = event.currentTarget.attributes[1].nodeValue;
-    course_title = event.currentTarget.attributes[2].nodeValue;
-    course_section = event.currentTarget.attributes[3].nodeValue;
-    console.log("clicked!");
+    const course_description = event.currentTarget.attributes[1].nodeValue;
+    const course_title = event.currentTarget.attributes[2].nodeValue;
+    const course_section = event.currentTarget.attributes[3].nodeValue;
+    console.log("course_box is clicked!");
     //feed data
     $("#exampleModal .course-description").text(course_description)
     $("#exampleModal .course-title").text(course_title)
@@ -43,18 +65,101 @@ $(document).ready(function(){
           return final_time;
         }
 
+        function emptyDay(days){
+          if(!days){
+            return "TBD"
+          }else{
+            return data.text[i].times[i].days
+          }
+        }
+
+        function emptyStart(start){
+          if(!start){
+            return "TBD"
+          }else{
+            return process_time(data.text[i].times[i].start)
+          }
+        }
+
+        function emptyEnd(end){
+          if(!end){
+            return "TBD"
+          }else{
+            return process_time(data.text[i].times[i].end)
+          }
+        }
+
+        function emptyBuilding(building){
+          if(!building){
+            return "TBD"
+          }else{
+            return data.text[i].times[i].building
+          }
+        }
+
+        function emptyRoom(room){
+          if(!room){
+            return "TBD"
+          }else{
+            return data.text[i].times[i].room
+          }
+        }
+
+        $("#sectionDetail tr.loading").css("display", "none");
+        function addSectionTr(id, section, instructors, status, enrolled, waiting, limit, days, start, end, building, room){
+          const tr = `<tr section_id=${id}" class="detail-tr" > section_details
+                <td>
+                    <p class="course-section">${section}</p>
+                </td>
+                <td>
+                    <p class="course-instructors">${instructors}</p>
+                </td>
+                <td>
+                    <p class="course-status">${status}</p>
+                </td>
+                <td>
+                    <p class="course-limit">${enrolled}</p>
+                </td>
+                <td>
+                    <p class="course-enrolled">${waiting}</p>
+                </td>
+                <td>
+                    <p class="course-waiting">${limit}</p>
+                </td>
+                <td>
+                    <p><b>Days:</b></p>
+                    <p class="course-date">${days}</p>
+                    <p><b>Start From:</b></p>
+                    <p class="course-start">${start}</p>
+                    <p><b>End At:</b></p>
+                    <p class="course-end">${end}</p>
+                </td>
+                <td>
+                    <p><b>Building:</b></p>
+                    <p class="course-building">${building}</p>
+                    <p><b>Room:</b></p>
+                    <p class="course-room">${room}</p>
+                </td>
+            </tr>
+          `
+          $(tr).appendTo(".section-table");
+        }
+        $("#sectionDetail tr.detail-tr").remove();
         for(i=0; i<data.text.length; i++){
-          $("#exampleModal .course-section").text(data.text[i].section);
-          $("#exampleModal .course-instructors").text(data.text[i].instructors);
-          $("#exampleModal .course-status").text(data.text[i].status);
-          $("#exampleModal .course-enrolled").text(data.text[i].enrolled);
-          $("#exampleModal .course-waiting").text(data.text[i].waiting);
-          $("#exampleModal .course-limit").text(data.text[i].limit);
-          $("#exampleModal .course-date").text(data.text[i].times[i].days);
-          $("#exampleModal .course-start").text(process_time(data.text[i].times[i].start));
-          $("#exampleModal .course-end").text(process_time(data.text[i].times[i].end));
-          $("#exampleModal .course-building").text(data.text[i].times[i].building);
-          $("#exampleModal .course-room").text(data.text[i].times[i].room);
+          addSectionTr(
+            data.text[i].id,
+            data.text[i].section,
+            data.text[i].instructors,
+            data.text[i].status,
+            data.text[i].enrolled,
+            data.text[i].waiting,
+            data.text[i].limit,
+            emptyDay(data.text[i].times[i]),
+            emptyStart(data.text[i].times[i]),
+            emptyEnd(data.text[i].times[i]),
+            emptyBuilding(data.text[i].times[i]),
+            emptyRoom(data.text[i].times[i])
+          );
         }
       },
       error: function(err){
@@ -65,21 +170,20 @@ $(document).ready(function(){
     //show modal
     $(".course-section").text("Loading...")
     $('#exampleModal').modal('show')
-/*
+    /*
     $.ajax({
       url:"/section_detail",
       data: {
-        course_id:
-
+        course_id: course_section
       },
       type: "POST",
       success: function(data){
 
       }
-    })
+    })*/
 
     //router.post('/section_detail', function(req, res){
-      //req.body*/
+      //req.body
     })
   })
   console.log("hey")

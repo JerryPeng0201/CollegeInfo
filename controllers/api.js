@@ -2,7 +2,7 @@ exports.get_section_data_post = function(req, res, next){
   const course_id = req.body.course_id;
   const Section = require('../models/section');
   const Instructors = require('../models/instructor')
-    Section.find({'course': course_id}, 'section instructors status enrolled waiting limit times', function(err, doc_list){
+    Section.find({'course': course_id}, 'section instructors status enrolled waiting limit times id', function(err, doc_list){
       if(err){
         res.json({text: err.message, status: 500});
       } else {
@@ -13,4 +13,8 @@ exports.get_section_data_post = function(req, res, next){
         }
       }
     })
+}
+
+exports.add_section_to_schedule = function(req, res, next){
+  res.json({})
 }
