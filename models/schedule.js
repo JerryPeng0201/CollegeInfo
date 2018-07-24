@@ -19,7 +19,6 @@ var scheduleSchema = mongoose.Schema( {
 });
 
 module.exports = mongoose.model( 'schedule', scheduleSchema );
-
 //user_id = req.user._id;
 
 
