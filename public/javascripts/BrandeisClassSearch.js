@@ -54,6 +54,22 @@ $(document).ready(function(){
     //show modal
     $(".course-section").text("Loading...")
     $('#exampleModal').modal('show')
+
+    $.ajax({
+      url:"/section_detail",
+      data: {
+        course_id:
+
+      },
+      type: "POST",
+      success: function(data){
+        
+      }
+    })
+
+    //router.post('/section_detail', function(req, res){
+      req.body
+    })
   })
   console.log("hey")
 })
