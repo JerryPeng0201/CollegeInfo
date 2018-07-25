@@ -1,15 +1,29 @@
+
 $(document).ready(function(){
 
   //let course_section = "";
   //let course_title = "";
   //let course_description = "";
 
-  $('#sectionDetail detail-tr').on('click', function(event){
+  /*
+   * 基本思路：
+   *     After solving the bugs of click function, we need to finish the ajax part
+   * section id = event.currentTarget.attributes[i].nodeValue. Find the "i" from
+   * google chrom inspect.
+   *     Then go to api.js to add another function to store and get the data from
+   * the section selected by the user. Use the section id to find the specific
+   * section to fulfull the user's requirement. Then go to app.js to finish
+   * app.post part.
+   *     There is also a bug in there. The instructor shows the their id number.
+   * but we need it shows the name of the instrocutors. Therefore, we need to connect
+   * with the database again and find the name of the instructor
+   */
+  $("#sectionDetail  tr.sectionInfo").on('click', function(event){
     console.log("addclass is clicked!");
     console.log(event.currentTarget);
 
     //const section_id = ;
-
+/*
     $.ajax({
       url: "/add_section_to_schedule/",
       type: "POST",
@@ -18,13 +32,10 @@ $(document).ready(function(){
       },
       dataType: 'json',
       success: function(data){
-        for(i=0; i<data.text.length; i++){
-          $('#exampleTable .courseTitle').text(data.text[i]);
-        }
 
         window.alert("Section added successfully.")
       }
-    })
+    })*/
   })
 
   $("#exampleModal").on('show.bs.modal', function (e) {
@@ -107,9 +118,9 @@ $(document).ready(function(){
 
         $("#sectionDetail tr.loading").css("display", "none");
         function addSectionTr(id, section, instructors, status, enrolled, waiting, limit, days, start, end, building, room){
-          const tr = `<tr section_id=${id}" class="detail-tr" > section_details
+          const tr = `<tr section_id=${id}" class="sectionInfo" > section_details
                 <td>
-                    <p class="course-section">${section}</p>
+                    <p class="course-section">${id.substring(id.indexOf("-")+1)}</p>
                 </td>
                 <td>
                     <p class="course-instructors">${instructors}</p>
