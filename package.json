@@ -20,6 +20,7 @@
     "passport-google-oauth": "^1.0.0",
     "pug": "2.0.0-beta11",
     "request": "^2.81.0",
+    "serve-favicon": "^2.5.0",
     "session": "^0.1.0"
   }
 }

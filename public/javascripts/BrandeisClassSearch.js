@@ -1,22 +1,26 @@
 $(document).ready(function(){
 
-  let course_section= "";
+  let course_section = "";
   let course_title = "";
   let course_description = "";
 
+  $('#addClass').on('click', function(event){
+    console.log("clicked!");
+    console.log("section: " + course_section);
+    console.log("description: " + course_description);
+    console.log("title: " + course_title);
+  })
+
   $("#mytable tr.course_box").on('click', function(event){
     console.log($(event.currentTarget));
-    const course_description = event.currentTarget.attributes[1].nodeValue;
-    const course_title = event.currentTarget.attributes[2].nodeValue;
-    //const course_section = event.currentTarget.attributes[3].nodeValue;
-
+    course_description = event.currentTarget.attributes[1].nodeValue;
+    course_title = event.currentTarget.attributes[2].nodeValue;
     course_section = event.currentTarget.attributes[3].nodeValue;
     console.log("clicked!");
     //feed data
     $("#exampleModal .course-description").text(course_description)
     $("#exampleModal .course-title").text(course_title)
 
-    
     //get section data
     $.ajax({
       url: "/get_section_data/",
@@ -61,22 +65,21 @@ $(document).ready(function(){
     //show modal
     $(".course-section").text("Loading...")
     $('#exampleModal').modal('show')
+/*
+    $.ajax({
+      url:"/section_detail",
+      data: {
+        course_id:
 
-    // $.ajax({
-    //   url:"/section_detail",
-    //   data: {
-    //     course_id:
+      },
+      type: "POST",
+      success: function(data){
 
-    //   },
-    //   type: "POST",
-    //   success: function(data){
-
-    //   }
-    // })
+      }
+    })
 
     //router.post('/section_detail', function(req, res){
-      // req.body
+      //req.body*/
     })
   })
-//   console.log("hey")
-// })
+  console.log("hey")

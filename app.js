@@ -7,6 +7,8 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
+const favicon = require('serve-favicon');
+var path = require('path');
 
 
 //codes for authentication
@@ -14,7 +16,10 @@ const flash = require('connect-flash');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const passport = require('passport')
 const configPassport = require('./config/passport')
-configPassport(passport)
+configPassport(passport);
+
+var app = express();
+app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -29,7 +34,7 @@ var footertermsRouter = require('./routes/footer-terms');
 var api_controller = require('./controllers/api.js');
 var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
 
-var app = express();
+
 
 //Test whether the mongoose database can work
 const mongoose = require( 'mongoose');
