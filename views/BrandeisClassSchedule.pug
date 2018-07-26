@@ -4,20 +4,71 @@ block content
   doctype html
   html
 
-    #exampleTable.table.table.table-bordered.table-hover
-      thead.thead-light
-        tr
-          th
-            | Section Title
-          th
-            | Section Description
-      tbody
-        tr
-          td
-            p.courseTitle Loading...
-          td
-            p.courseDescription Loading...
+  - function processTime(time){var final_time;if(time % 60 == 0){final_time=Math.floor(time / 60) + ": 00"}else if(time % 60 !== 0){final_time = Math.floor(time / 60) + ": " + (time % 60)}else if(time == false){final_time = "TBD"}return final_time;}
 
+    .container
+      hr
+      p &nbsp
+      h20 Your Classes List
+      p &nbsp
+      if list
+        table#sectionSchedule.table.table-bordered.table-hover
+          thead.thead-light
+            tr.confirm
+              th
+                | Class Name
+              th
+                | Class Code
+              th
+                | Enrollment Code
+              th
+                | Instructors
+              th
+                | Status
+              th
+                | Limit
+              th
+                | Enrolled
+              th
+                | Waiting
+              th
+                | Schedule
+              th
+                | Location
+
+          tbody.section-form
+            each section in list
+              tr.pending
+                td
+                  p.course-name #{section.course.name}
+                td
+                  p.course-code #{section.course.code}
+                td
+                  p.section-id #{section.id.substring(section.id.indexOf("-")+1)}
+                td
+                  p.section-ins #{section.instructors}
+                td
+                  p.section-status #{section.status}
+                td
+                  p.section-limit #{section.limit}
+                td
+                  p.section-enrolled #{section.enrolled}
+                td
+                  p.section-waiting #{section.waiting}
+                td
+                  each day in section.times
+                    p.section-days #{day.days}
+                    p.section-start #{processTime(day.start)}
+                    p.section-end #{processTime(day.end)}
+                td
+                  each day in section.times
+                    p #{day.building} #{day.room}
+
+
+      p &nbsp
+      hr
+      p &nbsp
+      h20 Your Class Schedule
     .container
       meta(charset='UTF-8')
       meta(name='viewport', content='width=device-width, initial-scale=1')

@@ -6,6 +6,7 @@ $(document).ready(function(){
   //let course_description = "";
 
   /*
+   * July 24, 2018
    * 基本思路：
    *     After solving the bugs of click function, we need to finish the ajax part
    * section id = event.currentTarget.attributes[i].nodeValue. Find the "i" from
@@ -17,26 +18,10 @@ $(document).ready(function(){
    *     There is also a bug in there. The instructor shows the their id number.
    * but we need it shows the name of the instrocutors. Therefore, we need to connect
    * with the database again and find the name of the instructor
+   *
+   * Files need to improve:
+   * app.js, api.js, BrandeisClassSchedule.pug, BrandeisClassSearch.js(javascript)
    */
-  $("#sectionDetail  tr.sectionInfo").on('click', function(event){
-    console.log("addclass is clicked!");
-    console.log(event.currentTarget);
-
-    //const section_id = ;
-/*
-    $.ajax({
-      url: "/add_section_to_schedule/",
-      type: "POST",
-      data: {
-        section_id: section_id
-      },
-      dataType: 'json',
-      success: function(data){
-
-        window.alert("Section added successfully.")
-      }
-    })*/
-  })
 
   $("#exampleModal").on('show.bs.modal', function (e) {
     $("#sectionDetail tr.loading").css("display", "block");
@@ -118,7 +103,7 @@ $(document).ready(function(){
 
         $("#sectionDetail tr.loading").css("display", "none");
         function addSectionTr(id, section, instructors, status, enrolled, waiting, limit, days, start, end, building, room){
-          const tr = `<tr section_id=${id}" class="sectionInfo" > section_details
+          const tr = `<tr section_id=${id} class="sectionInfo" > section_details
                 <td>
                     <p class="course-section">${id.substring(id.indexOf("-")+1)}</p>
                 </td>
@@ -155,7 +140,7 @@ $(document).ready(function(){
           `
           $(tr).appendTo(".section-table");
         }
-        $("#sectionDetail tr.detail-tr").remove();
+        $("#sectionDetail tr.sectionInfo").remove();
         for(i=0; i<data.text.length; i++){
           addSectionTr(
             data.text[i].id,
@@ -172,6 +157,31 @@ $(document).ready(function(){
             emptyRoom(data.text[i].times[i])
           );
         }
+
+        $("#sectionDetail tr.sectionInfo").on('click', function(event){
+          console.log("addclass is clicked!");
+          console.log($(event.currentTarget));
+
+          const section_id = event.currentTarget.attributes[0].nodeValue;
+          console.log("section_id: " + section_id);
+
+          $.ajax({
+            url: "/add_section_to_schedule/",
+            type: "POST",
+            data: {
+              section_id: section_id
+            },
+            dataType: 'json',
+            success: function(data){
+              window.alert("Section added successfully.");
+            },error: function(err){
+              console.log("There's an error");
+              console.log(err)
+              //$("#sectionSchedule .id").text(err.responseText);
+            }
+
+          })
+        })
       },
       error: function(err){
         $("#exampleModal .course-section").text(err.responseText);

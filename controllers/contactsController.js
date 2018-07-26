@@ -1,6 +1,6 @@
-'use strict';
+;
 const Posts = require( '../models/contacts' );
-console.log("loading the contacts Controller")
+console.log("Contact-us Controller Normal")
 
 
 exports.getAllContacts = ( req, res ) => {
