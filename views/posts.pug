@@ -5,7 +5,20 @@ block content
   script(src="/javascripts/modalReload.js")
   .jumbotron#addposts
 
-
+  form(method='post')
+    .form-group
+        label(for='posts') Type
+        select(name='porigin')#pname.form-control
+            option Apparel / Clothing
+            option Art / Office Supplies
+            option Computer Products
+            option Electronics gadgets
+            option Furniture
+            option Household gadgets
+            option Health / Beauty
+            option PlayStation/ Xbox Games
+            option Sublight spaceships
+    button.btn.btn-primary(type='submit') Search
 
   .flex-container
     each p in posts
