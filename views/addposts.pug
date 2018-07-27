@@ -4,7 +4,7 @@ block content
   .jumbotron#addposts
 
   .container
-    form(method='post')
+    form(method='POST')
         .form-group
             label(for='posts') Item name
             input(type="text" name='pname' placeholder='Enter Sale Item Name Here')#pname.form-control
@@ -33,4 +33,4 @@ block content
             label(for='posts') Photo of your item
             input(type='file' name='pphoto')#pname.form-control-file
 
-    input(type='submit' value="Submit post").btn.btn-primary
+        input(type='submit' value="Submit post").btn.btn-primary

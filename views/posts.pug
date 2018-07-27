@@ -29,7 +29,7 @@ block content
               li.pli.list-group-item Type: #{p.porigin}
               li.pli.list-group-item $#{p.pprice}
               if user.id == p.pid
-                button.btn.btn-primary(deleteName='pname', type='submit') Delete
+                button.btn.btn-primary.delete-button(type="button" doc_id= p._id) Delete
               button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
 

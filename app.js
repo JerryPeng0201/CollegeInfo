@@ -7,6 +7,19 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
+const Section = require('./models/section');
+
+// const favicon = require('serve-favicon');
+// var path = require('path');
+
+var weekday = new Array(7);
+weekday[0] = "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
 
 
 //codes for authentication
@@ -14,7 +27,10 @@ const flash = require('connect-flash');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const passport = require('passport')
 const configPassport = require('./config/passport')
-configPassport(passport)
+configPassport(passport);
+
+var app = express();
+// app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -28,8 +44,9 @@ var teamRouter = require('./routes/team');
 var footertermsRouter = require('./routes/footer-terms');
 var api_controller = require('./controllers/api.js');
 var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
+var Group = require('./models/group.js');
+var Subject = require('./models/subject');
 
-var app = express();
 
 //Test whether the mongoose database can work
 const mongoose = require( 'mongoose');
@@ -74,6 +91,8 @@ app.use((req,res,next) => {
   }
   next()
 })
+
+app.use(bodyParser.urlencoded({ extended: true}));
 
 // here are the authentication routes
 
@@ -135,7 +154,86 @@ app.get('/BrandeisHome', isLoggedIn, function(req, res) {
     });
 });
 
+function replyToDiaf(req, res, next){
+  // console.dir(req.body)
+  return res.json({
+      "fulfillmentMessages": [],
+      "fulfillmentText": res.locals.output_string,
+      "payload":{"slack":{"text":res.locals.output_string}},
+      "outputContexts": [],
+      "source": "Text Source",
+      "followupEventInput":{}
+    });
 
+}
+
+
+function process_request(req, res, next){
+  console.dir(req.body);
+  res.locals.output_string = "there was an error";
+  var temp = "";
+  console.log("in the processing")
+  sessions[req.body.session]= sessions[req.body.session] || {};
+  console.dir(sessions);
+  let session = sessions[req.body.session];
+  console.dir(session);
+  console.log("before user find one");
+  //if getKeycode
+  let keycode = 0;
+  User.findOne({keycode: keycode}, function(err, user_doc){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      if(user_doc){
+        session.user_id = user_doc._id;
+      } else {
+        session.user_id = 0;
+      }
+      keycode = session.user_id;
+    }
+  })
+
+  console.log("before if");
+
+  if(req.body.queryResult.intent.displayName == "how_many_total"){
+    console.log("how many triggered");
+    Section.count()
+      .exec()
+      .then((num) => {
+        console.log("in next(num)" + num);
+        res.locals.output_string = "There are " + num + " courses";
+        session.department = "all";
+        next();
+      })
+      .catch((err) => {
+        console.log("err");
+        console.dir(err);
+        res.locals.output_string = "There was an error.";
+        next();
+      })
+    }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
+      console.log("which classes at time triggered");
+      console.dir(req.body);
+      const date = req.body.queryResult.parameters['date'];
+      console.log("date = " + date);
+      var d = new Date(date);
+      console.dir(d);
+      
+      res.locals.output_string = "Lots of classes on "+weekday[d.getDay()];
+    
+      next();
+    }
+  else{
+    console.log("else");
+    res.locals.output_string = "We did";
+    next();
+  }
+}
+
+let sessions = {};
+
+app.post('/hook', process_request, replyToDiaf);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -157,9 +255,148 @@ app.post('/addposts', isLoggedIn, postsController.savePosts)
 //app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
-app.post('/posts', isLoggedIn, postsController.deletePosts)
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
+app.post('/posts/:post_id/delete', isLoggedIn, postsController.deletePost);
+
+app.get('/chatroom', isLoggedIn, function(req, res){
+  res.render('chatroom', {})
+});
+
+app.get('/Groups', isLoggedIn, function(req, res){
+  Group.find({}, function(err, group_list){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      res.render("Groups", {
+        title: "groups",
+        Groups: group_list,
+      });
+    }
+  })
+});
+
+app.get('/Groups/addGroups', isLoggedIn, function(req, res){
+  res.render('addGroups');
+})
+
+app.post('/Groups/addGroups', isLoggedIn, function(req, res){
+  const group_name = req.body.name.trim();
+  if(!group_name){
+    res.status(400);
+    res.json({message: "Please enter a name for the group"})
+    return;
+  } else if(typeof group_name != "string"){
+    res.status(400);
+    res.json({message: "Please enter a valid group name"});
+    return;
+  }
+  
+  const group = {
+    name: req.body.name,
+    createdAt: new Date(),
+    locked: false,
+  }
+
+  const new_group = new Group(group);
+  new_group.save(function(err){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      res.redirect('/Groups');
+    }
+  })
+})
+
+//add grous for each subject
+if(process.env.GENERATE_GROUP == "true"){
+  const group_list = [];
+  Subject.distinct('name',{}, function(err, result){
+    for(var subject_name of result){
+      const group = {
+        name: "Discussion group for " + subject_name,
+        createdAt: new Date(),
+        locked: true,
+      }
+
+      const new_group = new Group(group);
+      group_list.push(new_group);
+
+      var sorted_group_list = group_list.sort(function(a,b){    
+        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));   
+    });
+    }
+
+    Group.insertMany(sorted_group_list, function(err, group_list){
+      if(err){
+        console.log(err);
+      } else {
+        console.log("Subject groups successfully generated.")
+      }   
+    })
+  })
+}
+
+
+app.post('/Groups/delete/:id', isLoggedIn, function(req, res){
+  Group.findByIdAndRemove(req.params.id, function(err){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      res.json({});
+    }
+  })
+})
+
+//////////////
+//change later
+app.get('/profile', isLoggedIn, function(req, res){
+  res.render('profile', {user:req.user})
+})
+
+app.post('/update_keycode', isLoggedIn, function(req, res){
+  const keycode = req.body.keycode;
+
+  User.findOne({keycode: keycode}, function(err, doc){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      if(doc){
+        if(doc._id.toString() == req.user._id.toString()){
+          res.json({});
+        } else {
+          res.status(400);
+          res.json({message: "Keycode used."});
+        }
+      } else {
+        User.findById(req.user._id, function(err, user_doc){
+          if(err){
+            res.status(err.status || 500);
+            res.json(err);
+          } else {
+            user_doc.keycode = keycode;
+            user_doc.save(function(err){
+              if(err){
+                res.status(err.status || 500);
+                res.json(err);
+              } else {
+                res.json({});
+              }
+            })
+          }
+        })
+      }
+    }
+  })
+
+
+})
+
+//////////////
 
 //For contact us page
 app.get('/contacts', function(req,res){
@@ -172,6 +409,7 @@ app.get('/contacts', function(req,res){
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {

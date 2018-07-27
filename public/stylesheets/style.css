@@ -4,6 +4,9 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.main-content {
+  padding: 40px 15px;
+}
 a {
   color: #00B7FF;
 }

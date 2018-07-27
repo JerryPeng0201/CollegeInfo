@@ -1,0 +1,12 @@
+extends layoutBSBrandeis
+
+block content 
+  h1 Create a new group
+
+  form(method = "post")
+    fieldset.form-group
+      label(for="name") Name;
+      input.form-control(name="name", type="text", placeholder="Enter a name")
+      small.text-muted Give your group a meaningful name for people to refer to it.
+    button.btn.btn-primary(type="submit") Creat a new chat room
+    a.btn.btn-info(href="/Groups") Cancel
