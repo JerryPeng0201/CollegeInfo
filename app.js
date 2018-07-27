@@ -55,7 +55,7 @@ mongoose.connect( mongoDB, {useNewUrlParser: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("Database Connection Normal")
+  console.log("Mongoose Database Normal")
 });
 
 
@@ -130,6 +130,7 @@ app.get('/BrandeisHome/authorized',
                 successRedirect : '/BrandeisHome',
                 failureRedirect : '/loginerror'
         }));
+console.log("Authentication System Normal")
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -148,10 +149,10 @@ function isLoggedIn(req, res, next) {
 
 // we require them to be logged in to see their profile
 app.get('/BrandeisHome', isLoggedIn, function(req, res) {
-        res.render('BrandeisHome', {
-            user : req.user // get the user out of session and pass to template
-        });
+    res.render('BrandeisHome', {
+        user : req.user // get the user out of session and pass to template
     });
+});
 
 function replyToDiaf(req, res, next){
   // console.dir(req.body)
@@ -238,9 +239,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/BrandeisHome', isLoggedIn, brandeisHomeRouter);
 app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
+app.post('/add_section_to_schedule', isLoggedIn, api_controller.add_section_to_schedule)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
-app.post('/add_section_to_schedule', isLoggedIn, api_controller.add_section_to_schedule)
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
 app.use('/BrandeisMajorSearch', brandeisMajorSearchRouter)
@@ -252,6 +253,8 @@ app.get('/addposts', isLoggedIn,function(req,res){
 app.post('/addposts', isLoggedIn, postsController.savePosts)
 //app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
+app.post('/posts', isLoggedIn, postsController.filterPosts);
+app.post('/posts', isLoggedIn, postsController.deletePosts)
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
 
@@ -419,3 +422,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+console.log("System Normal")

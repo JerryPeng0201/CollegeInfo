@@ -49,7 +49,10 @@ router.post('/', function(req, res, next){
       Subject.find({'term':'1043'}, 'id name abbreviation', callback);
     },
     course_list: function(callback){
-      Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}}, 'name requirements description code independent_study id', callback);
+      Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}},
+      'name requirements description code independent_study id',
+      {sort: {code:1}},
+      callback);
     }
   }, function(err, results){
     if(err){
@@ -62,6 +65,8 @@ router.post('/', function(req, res, next){
     }
   })
 });
+
+
 // The use can't access the database so this webpage is for updating
 router.get('/update_data', function(req, res, next){
   const secret = req.query.secret;

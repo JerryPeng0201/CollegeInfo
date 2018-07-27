@@ -1,4 +1,4 @@
-'use strict';
+;
 const ClassSearch = require( '../models/classSearch' );
 console.log("loading the classSearch Controller");
 

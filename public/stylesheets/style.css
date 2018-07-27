@@ -23,10 +23,19 @@ nav#welcomePage{
   font-size: 1.5em;
 }
 
+#welcomePageF1.row.featurette {
+  background-color: #e0e0e0;
+}
+
 h2 {
   font-size: 2.5em;
   font-family: serif;
   font-weight: bold;
+  margin-top: 10%;
+}
+
+h1 {
+  color: white;
 }
 
 #teamIN.p {
@@ -76,6 +85,7 @@ a.navbar-brand{
   background: none;
   margin-left: -50px;
   margin-right: -50px;
+
 }
 
 h6 {

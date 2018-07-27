@@ -10,12 +10,16 @@ var scheduleSchema = mongoose.Schema( {
     section_list: {
       type: [Schema.ObjectId],
       ref: 'section',
-    },
+    }
+    /*
+    Schedule.update({_id: scheduleid}, {$push: {section_list: data}})
+    */
+    /*
     term: {
-      type: Schema.ObjectId,
+      type: Schema.ObjectI,
       ref: 'term',
       required: true,
-    },
+    },*/
 });
 
 module.exports = mongoose.model( 'schedule', scheduleSchema );
@@ -23,4 +27,4 @@ module.exports = mongoose.model( 'schedule', scheduleSchema );
 
 
 //when render
-schedule.find({...}).populate('creator').populate('term').populate('section_list').exec(function(err, result))
+//schedule.find({...}).populate('creator').populate('term').populate('section_list').exec(function(err, result))
