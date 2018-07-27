@@ -62,6 +62,8 @@ router.post('/', function(req, res, next){
     }
   })
 });
+
+
 // The use can't access the database so this webpage is for updating
 router.get('/update_data', function(req, res, next){
   const secret = req.query.secret;
