@@ -1,6 +1,6 @@
-'use strict';
+;
 const Posts = require( '../models/posts' );
-console.log("loading the posts Controller")
+console.log("Item-Post Controller Normal")
 
 exports.myPosts = (req, res) => {
   Posts.find({pid: req.user._id}, function(err, post_list){
@@ -80,7 +80,7 @@ exports.savePosts = ( req, res ) => {
 // };
 exports.getPdes = ( req, res ) => {
   const objId = new mongo.ObjectId(req.params.id)
-  Posts.findOne({"_id": objID}) 
+  Posts.findOne({"_id": objID})
     .exec()
     .then( ( posts ) => {
       res.render( 'posts', {
