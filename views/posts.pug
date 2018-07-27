@@ -7,17 +7,17 @@ block content
 
   form(method='post')
     .form-group
-        label(for='posts') Type
+        label(for='pname') Type
         select(name='porigin')#pname.form-control
-            option Apparel / Clothing
-            option Art / Office Supplies
-            option Computer Products
-            option Electronics gadgets
-            option Furniture
-            option Household gadgets
-            option Health / Beauty
-            option PlayStation/ Xbox Games
-            option Sublight spaceships
+            option(selected= "Apparel / Clothing" == postType) Apparel / Clothing
+            option(selected= "Art / Office Supplies" == postType) Art / Office Supplies
+            option(selected= "Computer Products" == postType) Computer Products
+            option(selected= "Electronics gadgets" == postType) Electronics gadgets
+            option(selected= "Furniture" == postType) Furniture
+            option(selected= "Household gadgets" == postType) Household gadgets
+            option(selected= "Health / Beauty" == postType) Health / Beauty
+            option(selected= "PlayStation/ Xbox Games" == postType) PlayStation/ Xbox Games
+            option(selected= "Sublight spaceships" == postType) Sublight spaceships
     button.btn.btn-primary(type='submit') Search
 
   .flex-container
@@ -29,13 +29,7 @@ block content
               li.pli.list-group-item Type: #{p.porigin}
               li.pli.list-group-item $#{p.pprice}
               if user.id == p.pid
-                  //- a.btn.btn-primary(href='#') Delete
-                  //- form(method="post" action="deletePosts")
-                  //-   each p in posts
-                  //-         input(name="deleteName" value=posts.name)
-                  //-         e #{posts.name} --
-                  //-         i #{posts.description}
-                  input(type='submit' value="Delete").btn.btn-primary
+                button.btn.btn-primary(deleteName='pname', type='submit') Delete
               button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
 

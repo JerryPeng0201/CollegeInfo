@@ -155,6 +155,8 @@ app.get('/addposts', isLoggedIn,function(req,res){
 app.post('/addposts', isLoggedIn, postsController.savePosts)
 //app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
+app.post('/posts', isLoggedIn, postsController.filterPosts);
+app.post('/posts', isLoggedIn, postsController.deletePosts)
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
 

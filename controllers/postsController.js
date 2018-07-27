@@ -34,6 +34,18 @@ exports.getAllPosts = ( req, res ) => {
       } );
   };
 
+exports.filterPosts = function(req, res, next){
+  const porigin = req.body.porigin;
+
+  Posts.find({porigin: porigin}, function(err, result){
+    if(err){
+      next(err);
+    } else {
+      res.render('posts', {posts: result, postType: porigin});
+    }
+  })
+}
+
 exports.savePosts = ( req, res ) => {
   console.log("in update posts!")
   console.dir(req)
@@ -56,28 +68,30 @@ exports.savePosts = ( req, res ) => {
     } );
 };
 
-// exports.deleteDrinks = (req, res) => {
-//   console.log("in deleteDrinks")
-//   let drinksName = req.body.deleteName
-//   if (typeof(drinksName)=='string') {
-//       Skill.deleteOne({name:drinksName})
-//            .exec()
-//            .then(()=>{res.redirect('/drinks')})
-//            .catch((error)=>{res.send(error)})
-//   } else if (typeof(drinksName)=='object'){
-//       Skill.deleteMany({name:{$in:drinksName}})
-//            .exec()
-//            .then(()=>{res.redirect('/drinks')})
-//            .catch((error)=>{res.send(error)})
-//   } else if (typeof(drinksName)=='undefined'){
-//       console.log("This is if they didn't select")
-//       res.redirect('/drinks')
-//   } else {
-//     console.log("This shouldn't happen!")
-//     res.send(`unknown drinkName: ${drinksName}`)
-//   }
+exports.deletePosts = (req, res) => {
+  console.log("Deleting posts")
+  let drinksName = req.body.deleteName
+  if (typeof(drinksName)=='string') {
+      Posts.deleteOne({name:drinksName})
+           .exec()
+           .then(()=>{res.redirect('/posts')})
+           .catch((error)=>{res.send(error)})
+  } else if (typeof(drinksName)=='object'){
+      Posts.deleteMany({name:{$in:drinksName}})
+           .exec()
+           .then(()=>{res.redirect('/posts')})
+           .catch((error)=>{res.send(error)})
+  } else if (typeof(drinksName)=='undefined'){
+      console.log("This is if they didn't select")
+      res.redirect('/posts')
+  } else {
+    console.log("This shouldn't happen!")
+    res.send(`unknown drinkName: ${drinksName}`)
+  }
 
-// };
+};
+
+
 exports.getPdes = ( req, res ) => {
   const objId = new mongo.ObjectId(req.params.id)
   Posts.findOne({"_id": objID})
