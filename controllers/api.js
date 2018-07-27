@@ -80,3 +80,41 @@ exports.add_section_to_schedule = function(req, res, next){
     }
   })
 } //export.add_section_to_schedule
+
+
+exports.delete_section_data = function(req, res, next){
+  const Schedule = require('../models/schedule');
+  const Section = require('../models/section');
+  const Coursr = require('../models/course');
+  const section_delete_id = req.body.section_delete;
+  console.log("section_delete_id: "+section_delete_id);
+
+  Section.findOne({_id: section_delete_id}, function(err, result){
+    if(err){
+      console.log("err: "+err);
+    }else if(result){
+      console.log("Loading the delete function");
+      Schedule.findOne({creator:req.user._id, section_list: section_delete_id}, function(err, schedule){
+        if(err){
+          console.log("err: "+err);
+        }else if(schedule){
+          const new_section_list = [];
+          for(var section of schedule.section_list){
+            if(section.toString() != section_delete_id){
+              new_section_list.push(section);
+            }
+          }
+
+          schedule.section_list = new_section_list;
+          schedule.save(function(err){
+            if(err){
+              console.log(err);
+            } else {
+              res.json({});
+            }
+          })
+        }
+      })
+    }
+  });//section.findone
+} //exports.delete_section_data

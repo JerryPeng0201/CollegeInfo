@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
           } else {
             if(SC_result.length == 0){
               console.log("Warning: Searching has no result");
-              res.render('BrandeisClassSchedule', { title: 'Brandeis', text: "Currently no available sections.", status: 404})
+              res.render('BrandeisClassSchedule', {message: "Currently no available sections."})
             } else {
               console.log("Pending... System Normal")
               console.log("Result-check: "+SC_result)
@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
               //res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_result}); //each section in list.section_list
               Course.find({'id': {$in: course_id_list}}, 'name code id description', function(err, CO_result){
                 if(err){
-                  res.render('BrandeisClassSchedule', { title: 'Brandeis' , err: err}); //each section in list.section_list
+                  res.render({message: err}); //each section in list.section_list
                 }else{
                   console.log("SC_result: " + SC_result)
                   console.log("CO_result: " + CO_result)
