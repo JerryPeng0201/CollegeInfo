@@ -1,0 +1,14 @@
+extends layoutBSBrandeis
+
+block head 
+  script(src="/javascripts/profile.js")
+
+block content
+  div.alert.alert-warning#keycode-alert-warn(role="alert" style="display:none") This keycode has been used!
+  div.alert.alert-info#keycode-alert-success(role="alert" style="display:none") Your keycode has been updated!
+
+  div.form-inline
+    div.form-group
+      label(for="keycode") Keycode
+      input#keycode.form-control(placeholder="Enter your keycode here..." value= user.keycode)
+    button.btn.btn-primary#submit-keycode Submit

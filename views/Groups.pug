@@ -1,0 +1,35 @@
+extends layoutBSBrandeis
+
+block head
+  script(src='/javascripts/group.js')
+
+block content
+  h1 Groups
+  p Join a discussion room and start chatting with your peers!
+  a.btn.btn-primary(href ="/Groups/addGroups") Create a new group
+  if Groups.length == 0
+    p 
+     b There are no groups yet.
+  else 
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th Created at
+          th Id 
+          th 
+      tbody
+        each group in Groups
+          tr
+            td= group.name
+            td= group.createdAt
+            td= group._id
+            td
+              div.btn-group(role="group")
+                if group.locked 
+                  button.btn.btn-secondary.disabled(type="button") Edit
+                  button.btn.btn-secondary.disabled(type="button") Remove
+                else
+                  button.btn.btn-secondary.group-edit(type="button" group_id = group._id) Edit
+                  button.btn.btn-secondary.group-remove(type="button" group_id= group._id) Remove
+          

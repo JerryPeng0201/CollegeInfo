@@ -1,0 +1,12 @@
+extends layoutBSBrandeis
+
+block content
+    h1 Edit Group
+
+    form(method="post")
+        fieldset.form-group
+            label(for="name") Name:
+            input.form-control(name="name", type="text", placeholder="Enter a name", value="#{Group.name}")
+            small.text-muted Give your group a meaningful name for people to refer to it.
+        button.btn.btn-primary(type="submit") Save Group
+        a.btn.btn-default(href="/Groups") Cancel
