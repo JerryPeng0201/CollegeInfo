@@ -35,7 +35,7 @@ router.get('/', function(req, res, next) {
               }
 
               //res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_result}); //each section in list.section_list
-              Course.find({'id': {$in: course_id_list}}, 'name code id', function(err, CO_result){
+              Course.find({'id': {$in: course_id_list}}, 'name code id description', function(err, CO_result){
                 if(err){
                   res.render('BrandeisClassSchedule', { title: 'Brandeis' , err: err}); //each section in list.section_list
                 }else{
@@ -57,7 +57,7 @@ router.get('/', function(req, res, next) {
                     section_obj.course = id_course_map[section_obj.course];
                     SC_list.push(section_obj);
                   }
-                  
+
                   res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_list}); //each section in list.section_list
                 }
               })
