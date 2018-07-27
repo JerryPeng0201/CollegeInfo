@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 const Section = require('./models/section');
-const uuid = require('node-uuid');
+
 // const favicon = require('serve-favicon');
 // var path = require('path');
 
@@ -254,9 +254,9 @@ app.post('/addposts', isLoggedIn, postsController.savePosts)
 //app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
-app.post('/posts', isLoggedIn, postsController.deletePosts)
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
+app.post('/posts/:post_id/delete', isLoggedIn, postsController.deletePost);
 
 app.get('/chatroom', isLoggedIn, function(req, res){
   res.render('chatroom', {})
