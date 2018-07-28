@@ -1,6 +1,6 @@
 const mongoose = require ('mongoose');
 
-var computerScienceSchema = mongoose.Schema( {
+var departmentREQSchema = mongoose.Schema( {
     name: {
       type: String,
       //required: true
@@ -29,4 +29,4 @@ var computerScienceSchema = mongoose.Schema( {
     honors: String
   } );
 
-  module.exports = mongoose.model( 'ComputerScience', computerScienceSchema );
+  module.exports = mongoose.model( 'departmentREQ', departmentREQSchema );

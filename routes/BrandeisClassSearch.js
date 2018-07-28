@@ -4,13 +4,13 @@ const http = require('http');
 var async = require('async');
 
 // Deploy the models to make index
-var Section = require('../models/section');
-var Course = require('../models/course');
-var Subject = require('../models/subject');
-var Term = require('../models/term');
-var Instructor = require('../models/instructor');
-var Requirement = require('../models/requirement');
-var ClassSearch = require('../models/classSearch');
+const Section = require('../models/section');
+const Course = require('../models/course');
+const Subject = require('../models/subject');
+const Term = require('../models/term');
+const Instructor = require('../models/instructor');
+const Requirement = require('../models/requirement');
+const ClassSearch = require('../models/classSearch');
 
 /* GET class search page. */
 router.get('/', function(req, res, next) {
