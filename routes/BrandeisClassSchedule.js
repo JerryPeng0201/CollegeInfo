@@ -3,6 +3,7 @@ var router = express.Router();
 const Schedule = require('../models/schedule');
 const Section = require('../models/section');
 const Course = require('../models/course');
+const Instructor = require('../models/instructor');
 const async = require('async');
 //const User = require('../models/user')
 
@@ -15,7 +16,7 @@ router.get('/', function(req, res, next) {
       next(err);
     }else if(result){
       console.log("System Normal")
-      console.log("Result-render-check: "+result);
+      //console.log("Result-render-check: "+result);
         Section.find({_id: {$in: result.section_list}}, 'section course instructors status enrolled waiting limit times id', function(err, SC_result){
           if(err){
             console.log("Warning: an error is detected." + err);
@@ -23,44 +24,71 @@ router.get('/', function(req, res, next) {
           } else {
             if(SC_result.length == 0){
               console.log("Warning: Searching has no result");
-              res.render('BrandeisClassSchedule', {message: "Currently no available sections."})
+              res.render('Brandeis', {message: "Currently no available sections."})
             } else {
               console.log("Pending... System Normal")
-              console.log("Result-check: "+SC_result)
-              console.log("section-course: "+SC_result.course)
+              //console.log("Result-check: "+SC_result)
+
               const course_id_list = [];
               for(var i = 0; i<SC_result.length; i++){
-                console.log("Course ID: "+SC_result[i].course)
+                //console.log("Course ID: "+SC_result[i].course)
                 course_id_list.push(SC_result[i].course);
               }
 
-              //res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_result}); //each section in list.section_list
-              Course.find({'id': {$in: course_id_list}}, 'name code id description', function(err, CO_result){
+              const ins_name = [];
+              for(var i = 0; i<SC_result.length; i++){
+                //console.log("Ins ID: " + SC_result[i].instructors);
+                ins_name.push(SC_result[i].instructors);
+              }
+              //console.log("ins_name check: " + ins_name);
+
+              Instructor.find({'id': {$in: ins_name}}, 'first last', function(err, INS_result){
                 if(err){
-                  res.render({message: err}); //each section in list.section_list
-                }else{
-                  console.log("SC_result: " + SC_result)
-                  console.log("CO_result: " + CO_result)
+                  res.render('BrandeisClassSchedule', {message: err}); //each section in list.section_list
+                }else if(INS_result){
+                  console.log("Loading the course");
 
-                  const id_course_map = {};
-                  for(var course of CO_result){
-                    id_course_map[course.id] = course;
-                  }
+                  //res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_result}); //each section in list.section_list
+                  Course.find({'id': {$in: course_id_list}}, 'name code id description', function(err, CO_result){
+                    if(err){
+                      res.render('BrandeisClassSchedule', {message: err}); //each section in list.section_list
+                    }else{
+                      //console.log("SC_result: " + SC_result)
+                      //console.log("CO_result: " + CO_result)
 
-                  const SC_list = [];
-                  for(var section of SC_result){
-                    const section_obj = section.toJSON({
-                      virtuals: false,
-                      versionKey: false
-                    })
+                      const id_course_map = {};
+                      for(var course of CO_result){
+                        id_course_map[course.id] = course;
+                      }
 
-                    section_obj.course = id_course_map[section_obj.course];
-                    SC_list.push(section_obj);
-                  }
+                      const name_ins_map = {}
+                      for(var ins of INS_result){
+                        name_ins_map[ins.id] = ins;
+                        //console.log("id-check: "+ins)
+                      }
 
-                  res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_list}); //each section in list.section_list
+                      const SC_list = [];
+                      for(var section of SC_result){
+                        const section_obj = section.toJSON({
+                          virtuals: false,
+                          versionKey: false
+                        })
+
+                        section_obj.course = id_course_map[section_obj.course];
+                        section_obj.ins = name_ins_map[section_obj.ins];
+                        //console.log("final-check-1: "+section_obj.course)
+                        console.log("final-check-2: " + section_obj.ins)
+                        SC_list.push(section_obj);
+                      }
+
+                      res.render('BrandeisClassSchedule', { title: 'Brandeis' , list: SC_list}); //each section in list.section_list
+                    }
+                  })//Course.find
+
                 }
-              })
+              })//Instructor.find
+
+
             }
           }
         })//Section.find

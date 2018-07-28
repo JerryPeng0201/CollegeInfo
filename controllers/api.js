@@ -10,7 +10,44 @@ exports.get_section_data_post = function(req, res, next){
         if(doc_list.length == 0){
           res.json({text: "Currently no available sections.", status: 404})
         } else {
-          res.json({text: doc_list, status:200})
+          console.log("doc_list: " + doc_list[0].instructors)
+
+          const ins_name=[];
+          for(var i = 0; i<doc_list.length; i++){
+            console.log("ins id: " + doc_list[i].instructors);
+            ins_name.push(doc_list[i].instructors);
+          }
+          console.log("ins_name: " + ins_name);
+
+
+          Instructor.find({id: {$in: ins_name}}, 'first last email', function(err, result){
+            if(err){
+              console.log("err: " + err)
+            }else if(result){
+              //console.log("result" + result);
+              //console.log("doc_list" + doc_list);
+
+              const name_ins_map = {}
+              for(var ins of result){
+                name_ins_map[ins.id] = ins;
+              }
+              //console.log("name_ins_map: " + name_ins_map);
+
+              const section_list = [];
+              for(var section of doc_list){
+                const section_obj = section.toJSON({
+                  virtuals: false,
+                  versionKey: false
+                })
+                section_obj.ins = name_ins_map[section_obj.ins];
+                section_list.push(section_obj);
+              } //for loop
+              res.json({text: section_list, status:200})
+            }
+          })
+
+
+          //res.json({text: doc_list, status:200})
         }
       }
     })
