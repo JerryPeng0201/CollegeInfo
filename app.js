@@ -257,7 +257,7 @@ app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
-app.post('/posts/:post_id/delete', isLoggedIn, postsController.deletePost);
+app.post('/myposts/:post_id/delete', isLoggedIn, postsController.deletePost);
 
 app.get('/chatroom', isLoggedIn, function(req, res){
   res.render('chatroom', {})
