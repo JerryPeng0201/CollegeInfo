@@ -16,6 +16,17 @@ exports.myPosts = (req, res) => {
   })
 }
 
+exports.deletePost = function(req, res){
+  Posts.findByIdAndRemove(req.params.post_id, function(err, doc){
+    if(err){
+      res.status(err.status || 500);
+      res.json(err);
+    } else {
+      res.json({})
+    }
+  })
+}
+
 exports.getAllPosts = ( req, res ) => {
 
     Posts.find( {} )
@@ -66,29 +77,6 @@ exports.savePosts = ( req, res ) => {
     .catch( error => {
       res.send( error );
     } );
-};
-
-exports.deletePosts = (req, res) => {
-  console.log("Deleting posts")
-  let drinksName = req.body.deleteName
-  if (typeof(drinksName)=='string') {
-      Posts.deleteOne({name:drinksName})
-           .exec()
-           .then(()=>{res.redirect('/posts')})
-           .catch((error)=>{res.send(error)})
-  } else if (typeof(drinksName)=='object'){
-      Posts.deleteMany({name:{$in:drinksName}})
-           .exec()
-           .then(()=>{res.redirect('/posts')})
-           .catch((error)=>{res.send(error)})
-  } else if (typeof(drinksName)=='undefined'){
-      console.log("This is if they didn't select")
-      res.redirect('/posts')
-  } else {
-    console.log("This shouldn't happen!")
-    res.send(`unknown drinkName: ${drinksName}`)
-  }
-
 };
 
 

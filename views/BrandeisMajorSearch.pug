@@ -4,4 +4,17 @@ block head
 
 
 block content
-  p This is an identify
+  .jumbotron#classSearch
+    p1 Brandeis Major/Minor Search
+    p &nbsp
+    form(method='post')
+      .form-row.align-items-center
+        .col-auto.my-1
+          label Select a Department
+          select(name='departmentBar')#searchBar.sub-bar.custom-select.mr-sm-2
+            each department in list
+              option(value= department.name) #{department.name}
+
+
+      p &nbsp
+      button.btn.btn-primary(type='submit') Search

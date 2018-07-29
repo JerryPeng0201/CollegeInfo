@@ -15,13 +15,8 @@ block content
             ul.list-group.list-group-flush
               li.pli.list-group-item Type: #{p.porigin}
               li.pli.list-group-item $#{p.pprice}
-              //- a.btn.btn-primary(href='#') Delete
-                //- form(method="post" action="deletePosts")
-                //-   each p in posts
-                //-         input(name="deleteName" value=posts.name)
-                //-         e #{posts.name} --
-                //-         i #{posts.description}
-              input(type='submit' value="Delete").btn.btn-primary
+              if user.id == p.pid
+                button.btn.btn-primary.delete-button(type="button" doc_id= p._id) Delete
               button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
 

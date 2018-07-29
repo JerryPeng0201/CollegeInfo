@@ -18,7 +18,7 @@ block content
             option(selected= "Health / Beauty" == postType) Health / Beauty
             option(selected= "PlayStation/ Xbox Games" == postType) PlayStation/ Xbox Games
             option(selected= "Sublight spaceships" == postType) Sublight spaceships
-    button.btn.btn-primary(type='submit') Search1
+    button.btn.btn-primary(type='submit') Search
 
   .flex-container
     each p in posts
@@ -28,8 +28,6 @@ block content
             ul.list-group.list-group-flush
               li.pli.list-group-item Type: #{p.porigin}
               li.pli.list-group-item $#{p.pprice}
-              if user.id == p.pid
-                button.btn.btn-primary(deleteName='pname', type='submit') Delete
               button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
 
@@ -45,7 +43,6 @@ block content
             | #{"<p.des>"}
         .modal-footer
           button.btn.btn-secondary(type='button' data-dismiss='modal') Close  
-                      
-                            
+  
 
                 

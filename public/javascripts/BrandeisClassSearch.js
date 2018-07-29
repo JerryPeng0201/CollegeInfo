@@ -101,6 +101,10 @@ $(document).ready(function(){
           }
         }
 
+        function processInsName(first, last){
+          return first + "." + last + "\n";
+        }
+
         $("#sectionDetail tr.loading").css("display", "none");
         function addSectionTr(id, section, instructors, status, enrolled, waiting, limit, days, start, end, building, room){
           const tr = `<tr section_id=${id} class="sectionInfo" > section_details
@@ -145,7 +149,7 @@ $(document).ready(function(){
           addSectionTr(
             data.text[i].id,
             data.text[i].section,
-            data.text[i].instructors,
+            processInsName(data.text[i].ins.first, data.text[i].ins.last),
             data.text[i].status,
             data.text[i].enrolled,
             data.text[i].waiting,

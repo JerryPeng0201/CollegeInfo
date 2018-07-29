@@ -8,7 +8,11 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 const Section = require('./models/section');
+<<<<<<< HEAD
 const async = require('async');
+=======
+
+>>>>>>> b07ebe68c47d71a6a7aa5724aef30b6022f27478
 // const favicon = require('serve-favicon');
 // var path = require('path');
 
@@ -309,6 +313,7 @@ app.use('/BrandeisClassSchedule', isLoggedIn, brandeisClassScheduleRouter)
 app.post('/add_section_to_schedule', isLoggedIn, api_controller.add_section_to_schedule)
 app.use('/BrandeisClassSearch', isLoggedIn, brandeisClassSearchRouter)
 app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
+app.post('/delete_section_data', isLoggedIn, api_controller.delete_section_data);
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
 app.use('/BrandeisMajorSearch', brandeisMajorSearchRouter)
@@ -320,9 +325,9 @@ app.get('/addposts', isLoggedIn,function(req,res){
 app.post('/addposts', isLoggedIn, postsController.savePosts)
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
-app.post('/posts', isLoggedIn, postsController.deletePosts)
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
 app.get('/myposts', isLoggedIn, postsController.myPosts);
+app.post('/myposts/:post_id/delete', isLoggedIn, postsController.deletePost);
 
 app.get('/chatroom', isLoggedIn, function(req, res){
   res.render('chatroom', {})
