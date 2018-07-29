@@ -5,28 +5,41 @@ var departmentREQSchema = mongoose.Schema( {
       type: String,
       //required: true
     },
-    minor: [{
-      compulsory: String,
-      electives: String,
-      grade: String,
-      pass: String,
-      comment: String
-    }],
-    major: [{
-      ba: [{
-        compulsory: String,
-        electives: String,
-        comment: String
-      }],
-      bs: [{
+    id: {
+      type: String,
+    },/*
+    minor: {
+      type: [{
         compulsory: String,
         electives: String,
         grade: String,
         pass: String,
         comment: String
       }]
-    }],
-    honors: String
+    },
+    major: {
+      type: [{
+        ba: {
+          type: [{
+            compulsory: String,
+            electives: String,
+            comment: String
+          }]
+        },
+        bs: {
+          type: [{
+            compulsory: String,
+            electives: String,
+            grade: String,
+            pass: String,
+            comment: String
+          }]
+        }
+      }]
+    },*/
+    honors: {
+      type: String
+    }
   } );
 
   module.exports = mongoose.model( 'departmentREQ', departmentREQSchema );

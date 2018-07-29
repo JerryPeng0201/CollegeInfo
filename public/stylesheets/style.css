@@ -11,12 +11,22 @@ a {
   color: #00B7FF;
 }
 
+em.event-code {
+  color: white;
+}
+
 nav#welcomePage{
   background: white;
   font-size: 1.5em;
   height: 80px;
   margin-top: -40px;
   font-family: serif;
+}
+
+h20 {
+  font-family: serif;
+  font-weight: bold;
+  font-size: 2em;
 }
 
 #navbarHead.p {
@@ -32,6 +42,24 @@ h2 {
   font-family: serif;
   font-weight: bold;
   margin-top: 10%;
+  margin-left: 10%;
+}
+
+h3 {
+  font-size: 2.5em;
+  font-family: serif;
+  font-weight: bold;
+}
+
+h0 {
+  font-size: 2.5em;
+  font-family: serif;
+  font-weight: bold;
+  margin-left: 10%;
+}
+
+#teamIN{
+  margin-left: 10%;
 }
 
 h1 {
@@ -429,6 +457,33 @@ hp {
 
 .cd-schedule .single-event[data-event="event-4"]:hover {
   background: #f7bd7f;
+}
+
+.cd-schedule .single-event[data-event="event-5"],
+.cd-schedule [data-event="event-5"] .header-bg {
+  background: #007E33;
+}
+
+.cd-schedule .single-event[data-event="event-5"]:hover {
+  background: #007E33;
+}
+
+.cd-schedule .single-event[data-event="event-6"],
+.cd-schedule [data-event="event-6"] .header-bg {
+  background: #ff4444;
+}
+
+.cd-schedule .single-event[data-event="event-6"]:hover {
+  background: #ff4444;
+}
+
+.cd-schedule .single-event[data-event="event-7"],
+.cd-schedule [data-event="event-7"] .header-bg {
+  background: #4285F4;
+}
+
+.cd-schedule .single-event[data-event="event-7"]:hover {
+  background: #ff4444;
 }
 
 .cd-schedule .event-modal {

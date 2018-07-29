@@ -219,9 +219,9 @@ function process_request(req, res, next){
       console.log("date = " + date);
       var d = new Date(date);
       console.dir(d);
-      
+
       res.locals.output_string = "Lots of classes on "+weekday[d.getDay()];
-    
+
       next();
     }
   else{
@@ -292,7 +292,7 @@ app.post('/Groups/addGroups', isLoggedIn, function(req, res){
     res.json({message: "Please enter a valid group name"});
     return;
   }
-  
+
   const group = {
     name: req.body.name,
     createdAt: new Date(),
@@ -324,8 +324,8 @@ if(process.env.GENERATE_GROUP == "true"){
       const new_group = new Group(group);
       group_list.push(new_group);
 
-      var sorted_group_list = group_list.sort(function(a,b){    
-        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));   
+      var sorted_group_list = group_list.sort(function(a,b){
+        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));
     });
     }
 
@@ -334,7 +334,7 @@ if(process.env.GENERATE_GROUP == "true"){
         console.log(err);
       } else {
         console.log("Subject groups successfully generated.")
-      }   
+      }
     })
   })
 }
