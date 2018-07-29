@@ -244,10 +244,12 @@ function process_request(req, res, next){
     var current_term_code = "";
     var course_id_list = [];
     var sub_id = "";
+    var course_list_result = "";
     async.series([
       function(callback){
         if(!term){
           Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+            console.log("term_doc: "+term_doc)
             if(err){
               console.log(err);
               callback(err, null);
@@ -276,8 +278,8 @@ function process_request(req, res, next){
         })
       },
       function(callback){
-        const startTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
-        const endTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        const startTime = dateToNumber(req.body.queryResult.parameters["time-period"].startTime);
+        const endTime = dateToNumber(req.body.queryResult.parameters["time-period"].endTime);
         Section.distinct('course', {id: {$in: id_list}, "times.end": {$lte: endTime}, "times.start": {$gte: startTime}}), function(err, id_list){
           if(err){
             callback(err, null);
@@ -288,25 +290,34 @@ function process_request(req, res, next){
         }
       },
       function(callback){
-        Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
-          console.log(course_list);
-
-          callback(null, course_list);
+        Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
+          if(err){
+            callback(err, null);
+          }else{
+            course_id_list = id_list;
+            callback(null, null);
+            course_list_result = course_list;
+          }
         })
       }
-    ], function(err, result){
+    ], function(err, results){
       if(err){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
+        console.log(course_list_result);
+        res.locals.output_string = "There are " + course_list_result.length + " classes on "+weekday[d.getDay()];
       }
       next();
     })
-  } else {
+  } else if (req.body.queryResult.intent.displayName == "who_designed") {
     console.log("else");
     res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
+  } else if(req.body.queryResult.intent.displayName == "help"){
+    res.locals.output_string = "You can say something like \"Which classes are offered by Computer Science Department from 8 to 11 am on Wednesday?\" ";
+  } else {
+    res.locals.output_string = "Oops, something went wrong... Could you please rephrase your request? You can say \"help\" for detailed support";
   }
 }
 
@@ -316,7 +327,6 @@ function process_request(req, res, next){
 
   //term --> get section
 
-<<<<<<< HEAD
   //start & end time --> get section
 
   //section --> get course
@@ -326,9 +336,7 @@ function process_request(req, res, next){
 
 
 
-=======
 //
->>>>>>> f1e2a326f3fe500f3d56ac641c2add26d9d9862f
 
 
 
