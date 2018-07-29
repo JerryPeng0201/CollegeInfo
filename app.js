@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 const Section = require('./models/section');
-const uuid = require('node-uuid');
+const async = require('async');
 // const favicon = require('serve-favicon');
 // var path = require('path');
 
@@ -46,6 +46,8 @@ var api_controller = require('./controllers/api.js');
 var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
 var Group = require('./models/group.js');
 var Subject = require('./models/subject');
+var Term = require('./models/term');
+var Course = require('./models/course');
 
 
 //Test whether the mongoose database can work
@@ -212,24 +214,89 @@ function process_request(req, res, next){
         res.locals.output_string = "There was an error.";
         next();
       })
-    }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
-      console.log("which classes at time triggered");
-      console.dir(req.body);
-      const date = req.body.queryResult.parameters['date'];
-      console.log("date = " + date);
-      var d = new Date(date);
-      console.dir(d);
-      
-      res.locals.output_string = "Lots of classes on "+weekday[d.getDay()];
+  }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
+    console.log("which classes at time triggered");
+    console.dir(req.body);
+    const date = req.body.queryResult.parameters['date'];
+    console.log("date = " + date);
+    var d = new Date(date);
+    console.dir(d);
+    let factor = "";
     
-      next();
+    if (d.getDay()==2 || d.getDay()==4){
+      factor = weekday[d.getDay()].substring(0,2).toLowerCase();  
+    }else{
+      factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
-  else{
+    const current_date = new Date();
+    var term = req.body.queryResult.parameters.term || 1182;
+
+    //get term
+
+    //term --> get section
+
+    var current_term_code = "";
+    var course_id_list = [];
+    async.series([
+      function(callback){
+        Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+          if(err){
+            console.log(err);
+            callback(err, null);
+          } else if(term_doc.name.includes("Summer")){
+            //change the term to the next one
+            current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
+            callback(null, null);
+          } else {
+            current_term_code = term_doc.id;
+            callback(null, null);
+          }
+        })
+      },
+      function(callback){
+        const section_id_regex = new RegExp("^" + current_term_code + "-");
+        Section.distinct('course', {"times.days":factor, id: {$regex: section_id_regex}}, function(err, id_list){
+          if(err){
+            callback(err, null);
+          } else {
+            course_id_list = id_list;
+            callback(null, null);
+          }
+        })
+      },
+      function(callback){
+        Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
+          console.log(course_list);
+        })
+      }
+    ], function(err, num_class){
+      if(err){
+        console.log(err);
+        res.locals.output_string = "Something went wrong...";
+      } else {
+        res.locals.output_string = num_class + " classes on "+weekday[d.getDay()];
+      }
+      next();
+    })    
+  } else {
     console.log("else");
-    res.locals.output_string = "We did";
+    res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
   }
 }
+
+
+
+  //get term
+
+  //term --> get section
+
+//   
+
+
+
+
+
 
 let sessions = {};
 
@@ -251,7 +318,6 @@ app.get('/addposts', isLoggedIn,function(req,res){
  res.render('addposts',{})
 });
 app.post('/addposts', isLoggedIn, postsController.savePosts)
-//app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
 app.post('/posts', isLoggedIn, postsController.deletePosts)

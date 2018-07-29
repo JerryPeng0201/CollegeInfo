@@ -13,11 +13,11 @@ var termSchema = mongoose.Schema( {
       //required: true
     },
     start: {
-      type: String,
+      type: Date,
       //required: true
     },
     end: {
-      type: String,
+      type: Date,
       //required: true
     }
   } );
