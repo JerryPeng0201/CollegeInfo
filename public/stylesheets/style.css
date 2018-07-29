@@ -89,7 +89,7 @@ a.navbar-brand{
 }
 
 h6 {
-  font-size: 10em;
+  font-size: 8em;
   font-weight: bold;
   font-family: serif;
   margin-top: -40%;
@@ -746,4 +746,10 @@ hp {
 
 .btn.btn-primary{
   margin: 4px;
+}
+
+.carousel-caption.indexp {
+position: absolute;
+left:670px;
+bottom: 340px;
 }
