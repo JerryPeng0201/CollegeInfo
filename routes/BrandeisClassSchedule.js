@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const Schedule = require('../models/schedule');
 const Section = require('../models/section');
 const Course = require('../models/course');
@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
               }
               //console.log("ins_name check: " + ins_name);
 
-              Instructor.find({'id': {$in: ins_name}}, 'first last', function(err, INS_result){
+              Instructor.find({'id': {$in: ins_name}}, 'first last id', function(err, INS_result){
                 if(err){
                   res.render('BrandeisClassSchedule', {message: err}); //each section in list.section_list
                 }else if(INS_result){
@@ -74,10 +74,18 @@ router.get('/', function(req, res, next) {
                           versionKey: false
                         })
 
+                        const array = section_obj.instructors
                         section_obj.course = id_course_map[section_obj.course];
-                        section_obj.ins = name_ins_map[section_obj.ins];
+                        console.log(array)
+                        for(var i = 0; i < section_obj.instructors.length; i++){
+                          //console.log("we're here")
+                          //console.log(section_obj.instructors[i])
+                          //console.log(name_ins_map[section_obj.instructors[i]])
+                          //console.log("length: " + section_obj.length)
+                          section_obj.instructors[i] = name_ins_map[section_obj.instructors[i]];
+                        }
                         //console.log("final-check-1: "+section_obj.course)
-                        console.log("final-check-2: " + section_obj.ins)
+                        console.log("final-check-2: " + section_obj.instructors)
                         SC_list.push(section_obj);
                       }
 

@@ -13,8 +13,29 @@ block content
           label Select a Department
           select(name='departmentBar')#searchBar.sub-bar.custom-select.mr-sm-2
             each department in list
-              option(value= department.name) #{department.name}
+              option(value= department.id) #{department.name}
 
 
       p &nbsp
       button.btn.btn-primary(type='submit') Search
+
+  if result
+    p List of all department result
+    table#mytable.table.table-bordered
+      thead.thead-light
+        each department in result
+          tr
+            th
+              | &nbsp
+            th
+              | #{department.name}
+      tbody
+        each department in result
+          tr
+            td
+              p Minor Requirement
+            td
+              p #{department.minor}
+          tr
+            td
+              p Major Requirement

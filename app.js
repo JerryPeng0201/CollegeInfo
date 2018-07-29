@@ -222,9 +222,9 @@ function process_request(req, res, next){
     var d = new Date(date);
     console.dir(d);
     let factor = "";
-    
+
     if (d.getDay()==2 || d.getDay()==4){
-      factor = weekday[d.getDay()].substring(0,2).toLowerCase();  
+      factor = weekday[d.getDay()].substring(0,2).toLowerCase();
     }else{
       factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
@@ -302,7 +302,7 @@ function process_request(req, res, next){
         res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
       }
       next();
-    })    
+    })
   } else {
     console.log("else");
     res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
@@ -316,6 +316,7 @@ function process_request(req, res, next){
 
   //term --> get section
 
+<<<<<<< HEAD
   //start & end time --> get section
 
   //section --> get course
@@ -325,6 +326,9 @@ function process_request(req, res, next){
 
 
 
+=======
+//
+>>>>>>> f1e2a326f3fe500f3d56ac641c2add26d9d9862f
 
 
 
@@ -391,7 +395,7 @@ app.post('/Groups/addGroups', isLoggedIn, function(req, res){
     res.json({message: "Please enter a valid group name"});
     return;
   }
-  
+
   const group = {
     name: req.body.name,
     createdAt: new Date(),
@@ -423,8 +427,8 @@ if(process.env.GENERATE_GROUP == "true"){
       const new_group = new Group(group);
       group_list.push(new_group);
 
-      var sorted_group_list = group_list.sort(function(a,b){    
-        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));   
+      var sorted_group_list = group_list.sort(function(a,b){
+        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));
     });
     }
 
@@ -433,7 +437,7 @@ if(process.env.GENERATE_GROUP == "true"){
         console.log(err);
       } else {
         console.log("Subject groups successfully generated.")
-      }   
+      }
     })
   })
 }

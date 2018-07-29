@@ -49,6 +49,7 @@ router.post('/', function(req, res, next){
       Subject.find({'term':'1043'}, 'id name abbreviation', callback);
     },
     course_list: function(callback){
+      console.log("req.body.termBar: "+req.body.termBar)
       Course.find({'term': req.body.termBar, 'subjects.id':{$regex: dept_regex}},
       'name requirements description code independent_study id',
       {sort: {code:1}},
@@ -86,6 +87,7 @@ router.get('/update_data', function(req, res, next){
   const function_list = [];
   /* Old Database(2004-2016)
    * http://registrar-prod-rhel6.unet.brandeis.edu/export/export-2004-2016.json
+   * http://registrar-prod-rhel6.unet.brandeis.edu/export/export.json
    */
   // Deploy the API, connect to the Brandeis class data
   http.get('http://registrar-prod-rhel6.unet.brandeis.edu/export/export.json', (resp) => {
