@@ -8,11 +8,7 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 const Section = require('./models/section');
-<<<<<<< HEAD
 const async = require('async');
-=======
-
->>>>>>> b07ebe68c47d71a6a7aa5724aef30b6022f27478
 // const favicon = require('serve-favicon');
 // var path = require('path');
 
