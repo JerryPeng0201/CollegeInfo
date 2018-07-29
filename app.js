@@ -170,6 +170,18 @@ function replyToDiaf(req, res, next){
 }
 
 
+/*
+ * This part is for the speaking control part.
+ * The speaking control part provides a platform for user to search class database
+ * by spekaing the keyword of the class, like name, time, instructor, etc. We use
+ * DialogFlow to edit the intents and entities to train the system. The user need to
+ * give a sentence first, like "I want to find a class offered by Computer Science Department
+ * from 8 to 10 in the fall semester". The core information is "tiem-period", "department name",
+ * and "term". If the user miss any piece of these information, the system will keep asking
+ * until the user provide all core information.
+ */
+
+ // This function is 
 function process_request(req, res, next){
   console.dir(req.body);
   res.locals.output_string = "there was an error";
@@ -229,7 +241,13 @@ function process_request(req, res, next){
       factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
     const current_date = new Date();
-    var term = req.body.queryResult.parameters.term;
+    var term = req.body.queryResult.parameters.Term;
+
+
+    function dateToNumber(date){
+      let convertedTime = date.getMinutes() + date.getHours()*60;
+      return convertedTime;
+    }
 
     //get term
 
@@ -237,21 +255,26 @@ function process_request(req, res, next){
 
     var current_term_code = "";
     var course_id_list = [];
+    var sub_id = "";
     async.series([
       function(callback){
-        Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
-          if(err){
-            console.log(err);
-            callback(err, null);
-          } else if(term_doc.name.includes("Summer")){
-            //change the term to the next one
-            current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
-            callback(null, null);
-          } else {
-            current_term_code = term_doc.id;
-            callback(null, null);
-          }
-        })
+        if(!term){
+          Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+            if(err){
+              console.log(err);
+              callback(err, null);
+            } else if(term_doc.name.includes("Summer")){
+              //change the term to the next one
+              current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
+              callback(null, null);
+            } else {
+              current_term_code = term_doc.id;
+              callback(null, null);
+            }
+          })
+        } else {
+          callback(null, null);
+        }
       },
       function(callback){
         const section_id_regex = new RegExp("^" + current_term_code + "-");
@@ -265,16 +288,30 @@ function process_request(req, res, next){
         })
       },
       function(callback){
+        const startTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        const endTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        Section.distinct('course', {id: {$in: id_list}, "times.end": {$lte: endTime}, "times.start": {$gte: startTime}}), function(err, id_list){
+          if(err){
+            callback(err, null);
+          }else{
+            course_id_list = id_list;
+            callback(null, null);
+          }
+        }
+      },
+      function(callback){
         Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
           console.log(course_list);
+
+          callback(null, course_list);
         })
       }
-    ], function(err, num_class){
+    ], function(err, result){
       if(err){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        res.locals.output_string = num_class + " classes on "+weekday[d.getDay()];
+        res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
       }
       next();
     })
@@ -291,7 +328,15 @@ function process_request(req, res, next){
 
   //term --> get section
 
-//
+  //start & end time --> get section
+
+  //section --> get course
+
+  //subject --> get course
+
+
+
+
 
 
 

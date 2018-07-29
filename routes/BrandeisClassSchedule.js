@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
           } else {
             if(SC_result.length == 0){
               console.log("Warning: Searching has no result");
-              res.render('Brandeis', {message: "Currently no available sections."})
+              res.render('BrandeisClassSchedule', {message: "Currently no available sections."})
             } else {
               console.log("Pending... System Normal")
               //console.log("Result-check: "+SC_result)
