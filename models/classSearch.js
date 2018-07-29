@@ -1,4 +1,4 @@
-;
+
 const mongoose = require ('mongoose');
 
 var classSearchSchema = mongoose.Schema( {

@@ -5,72 +5,76 @@ block content
   html
 
   - function processTime(time){var final_time;if(time % 60 == 0){final_time=Math.floor(time / 60) + ": 00"}else if(time % 60 !== 0){final_time = Math.floor(time / 60) + ": " + (time % 60)}else if(time == false){final_time = "TBD"}return final_time;}
+  - const course_event_map = {}
+  - var event_index = 1;
+  - function getEvent(section){const id = section.course.id;if(course_event_map[id]){return course_event_map[id]} else {course_event_map[id] = "event-"+event_index; event_index++; return course_event_map[id]} }
 
-    .container
-      hr
-      p &nbsp
-      h20 Your Classes List
-      p Click the line to delete it from the schedule
-      p &nbsp
-      if list
-        table#sectionSchedule.table.table-bordered.table-hover
-          thead.thead-light
-            tr.confirm
-              th
-                | Class Code
-              th
-                | Enrollment Code
-              th
-                | Instructors
-              th
-                | Status
-              th
-                | Limit
-              th
-                | Enrolled
-              th
-                | Waiting
-              th
-                | Schedule
-              th
-                | Location
+    hr
+    p
+      h20 Your Classes List:
+    p
+      h20 (Click the line to delete it from the schedule)
+    hr
 
-          tbody.section-form
-            each section in list
-              tr.checkTable(section_id=section._id)
-                td
-                  p.course-code #{section.course.code}
-                td
-                  p.section-id #{section.id.substring(section.id.indexOf("-")+1)}
-                td
-                  p.section-ins-first #{section.ins.first}
-                  p.section-ins-last #{section.ins.last}
-                td
-                  p.section-status #{section.status}
-                td
-                  p.section-limit #{section.limit}
-                td
-                  p.section-enrolled #{section.enrolled}
-                td
-                  p.section-waiting #{section.waiting}
-                td
-                  each day in section.times
-                    p.section-days #{day.days}
-                    p.section-start #{processTime(day.start)}
-                    p.section-end #{processTime(day.end)}
-                td
-                  each day in section.times
-                    if day.building
-                      p.section-location #{day.building}
-                      p.section-room #{day.room}
-                    else
-                      p TBD
+    if list
+      table#sectionSchedule.table.table-bordered.table-hover
+        thead.thead-light
+          tr.confirm
+            th
+              | Class Code
+            th
+              | Enrollment Code
+            th
+              | Instructors
+            th
+              | Status
+            th
+              | Limit
+            th
+              | Enrolled
+            th
+              | Waiting
+            th
+              | Schedule
+            th
+              | Location
+
+        tbody.section-form
+          each section in list
+            tr.checkTable(section_id=section._id)
+              td
+                p.course-code #{section.course.code}
+              td
+                p.section-id #{section.id.substring(section.id.indexOf("-")+1)}
+              td
+                each instructor in section.instructors
+                  p.section-ins-first #{instructor.first} #{instructor.last}
+              td
+                p.section-status #{section.status}
+              td
+                p.section-limit #{section.limit}
+              td
+                p.section-enrolled #{section.enrolled}
+              td
+                p.section-waiting #{section.waiting}
+              td
+                each day in section.times
+                  p.section-days #{day.days}
+                  p.section-start #{processTime(day.start)} - #{processTime(day.end)}
+              td
+                each day in section.times
+                  if day.building
+                    p.section-location #{day.building}
+                    p.section-room #{day.room}
+                  else
+                    p TBD
 
 
-      p &nbsp
-      hr
-      p &nbsp
-      h20 Your Class Schedule
+    p &nbsp
+    hr
+    h20 Your Class Schedule:
+    hr
+
     if list
       .container
         meta(charset='UTF-8')
@@ -81,6 +85,8 @@ block content
         .cd-schedule.loading
           .timeline
             ul
+              li
+                span 07:30
               li
                 span 08:00
               li
@@ -149,8 +155,8 @@ block content
                     each day in section.times
                       each date in day.days
                         if date == 'm'
-                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event='event-1')
-                            a(href='#0')
+                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event= getEvent(section))
+                            a
                               em.event-name #{section.course.code}
                               em.event-code #{section.id.substring(section.id.indexOf("-")+1)}
 
@@ -162,8 +168,8 @@ block content
                     each day in section.times
                       each date in day.days
                         if date == 'tu'
-                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event='event-2')
-                            a(href='#0')
+                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event= getEvent(section))
+                            a
                               em.event-name #{section.course.code}
                               em.event-code #{section.id.substring(section.id.indexOf("-")+1)}
 
@@ -176,8 +182,8 @@ block content
                     each day in section.times
                       each date in day.days
                         if date == 'w'
-                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event='event-3')
-                            a(href='#0')
+                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), data-content= section.course.description, data-event= getEvent(section))
+                            a
                               em.event-name #{section.course.code}
                               em.event-code #{section.id.substring(section.id.indexOf("-")+1)}
 
@@ -190,8 +196,8 @@ block content
                     each day in section.times
                       each date in day.days
                         if date == 'th'
-                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), em.event-info= section.course.description, data-event='event-4')
-                            a(href='#0')
+                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), em.event-info= section.course.description, data-event= getEvent(section))
+                            a
                               em.event-name #{section.course.code}
                               em.event-code #{section.id.substring(section.id.indexOf("-")+1)}
 
@@ -204,8 +210,8 @@ block content
                     each day in section.times
                       each date in day.days
                         if date == 'f'
-                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), em.event-info= section.course.description, data-event='event-5')
-                            a(href='#0')
+                          li.single-event(data-start= processTime(day.start), data-end= processTime(day.end), em.event-info= section.course.description, data-event= getEvent(section))
+                            a
                               em.event-name #{section.course.code}
                               em.event-code #{section.id.substring(section.id.indexOf("-")+1)}
 

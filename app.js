@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const User = require( './models/user' );
 const flash = require('connect-flash');
 const Section = require('./models/section');
-
+const async = require('async');
 // const favicon = require('serve-favicon');
 // var path = require('path');
 
@@ -46,6 +46,8 @@ var api_controller = require('./controllers/api.js');
 var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
 var Group = require('./models/group.js');
 var Subject = require('./models/subject');
+var Term = require('./models/term');
+var Course = require('./models/course');
 
 
 //Test whether the mongoose database can work
@@ -212,24 +214,126 @@ function process_request(req, res, next){
         res.locals.output_string = "There was an error.";
         next();
       })
-    }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
-      console.log("which classes at time triggered");
-      console.dir(req.body);
-      const date = req.body.queryResult.parameters['date'];
-      console.log("date = " + date);
-      var d = new Date(date);
-      console.dir(d);
-      
-      res.locals.output_string = "Lots of classes on "+weekday[d.getDay()];
-    
-      next();
+  }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
+    console.log("which classes at time triggered");
+    console.dir(req.body);
+    const date = req.body.queryResult.parameters['date'];
+    console.log("date = " + date);
+    var d = new Date(date);
+    console.dir(d);
+    let factor = "";
+
+    if (d.getDay()==2 || d.getDay()==4){
+      factor = weekday[d.getDay()].substring(0,2).toLowerCase();
+    }else{
+      factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
-  else{
+    const current_date = new Date();
+    var term = req.body.queryResult.parameters.Term;
+
+
+    function dateToNumber(date){
+      let convertedTime = date.getMinutes() + date.getHours()*60;
+      return convertedTime;
+    }
+
+    //get term
+
+    //term --> get section
+
+    var current_term_code = "";
+    var course_id_list = [];
+    var sub_id = "";
+    async.series([
+      function(callback){
+        if(!term){
+          Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+            if(err){
+              console.log(err);
+              callback(err, null);
+            } else if(term_doc.name.includes("Summer")){
+              //change the term to the next one
+              current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
+              callback(null, null);
+            } else {
+              current_term_code = term_doc.id;
+              callback(null, null);
+            }
+          })
+        } else {
+          callback(null, null);
+        }   
+      },
+      function(callback){
+        const section_id_regex = new RegExp("^" + current_term_code + "-");
+        Section.distinct('course', {"times.days":factor, id: {$regex: section_id_regex}}, function(err, id_list){
+          if(err){
+            callback(err, null);
+          } else {
+            course_id_list = id_list;
+            callback(null, null);
+          }
+        })
+      },
+      function(callback){
+        const startTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        const endTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        Section.distinct('course', {id: {$in: id_list}, "times.end": {$lte: endTime}, "times.start": {$gte: startTime}}), function(err, id_list){
+          if(err){
+            callback(err, null);
+          }else{
+            course_id_list = id_list;
+            callback(null, null);
+          }
+        }
+      },
+      function(callback){
+        Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
+          console.log(course_list);
+
+          callback(null, course_list);
+        })
+      }
+    ], function(err, result){
+      if(err){
+        console.log(err);
+        res.locals.output_string = "Something went wrong...";
+      } else {
+        res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
+      }
+      next();
+    })
+  } else {
     console.log("else");
-    res.locals.output_string = "We did";
+    res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
   }
 }
+
+
+
+  //get term
+
+  //term --> get section
+
+<<<<<<< HEAD
+  //start & end time --> get section
+
+  //section --> get course
+
+  //subject --> get course
+
+
+
+
+=======
+//
+>>>>>>> f1e2a326f3fe500f3d56ac641c2add26d9d9862f
+
+
+
+
+
 
 let sessions = {};
 
@@ -252,7 +356,6 @@ app.get('/addposts', isLoggedIn,function(req,res){
  res.render('addposts',{})
 });
 app.post('/addposts', isLoggedIn, postsController.savePosts)
-//app.use('/addposts', isLoggedIn, addpostsRouter);
 app.get('/posts', isLoggedIn, postsController.getAllPosts );
 app.post('/posts', isLoggedIn, postsController.filterPosts);
 app.get('/posts/:id', isLoggedIn, postsController.attachPdes, postsController.getPdes);
@@ -292,7 +395,7 @@ app.post('/Groups/addGroups', isLoggedIn, function(req, res){
     res.json({message: "Please enter a valid group name"});
     return;
   }
-  
+
   const group = {
     name: req.body.name,
     createdAt: new Date(),
@@ -324,8 +427,8 @@ if(process.env.GENERATE_GROUP == "true"){
       const new_group = new Group(group);
       group_list.push(new_group);
 
-      var sorted_group_list = group_list.sort(function(a,b){    
-        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));   
+      var sorted_group_list = group_list.sort(function(a,b){
+        return new Date(Date.parse(a.CreatedAt)) - new Date(Date.parse(b.CreatedAt));
     });
     }
 
@@ -334,7 +437,7 @@ if(process.env.GENERATE_GROUP == "true"){
         console.log(err);
       } else {
         console.log("Subject groups successfully generated.")
-      }   
+      }
     })
   })
 }
