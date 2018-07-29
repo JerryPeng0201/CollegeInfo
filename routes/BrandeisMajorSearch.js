@@ -25,7 +25,7 @@ router.post('/', function(req, res, next){
       console.log("result-check: " + department_list)
       console.log("departmentBar: " + req.body.departmentBar.toString())
 
-      DepartmentREQ.find({}, 'name id honors', function(err, reqs_result){
+      DepartmentREQ.find({}, 'name id major minor honors', function(err, reqs_result){
         if(err){
           console.log("err: "+err);
         }else if(reqs_result){

@@ -38,4 +38,13 @@ block content
               p #{department.minor}
           tr
             td
-              p Major Requirement
+              p Major Requirement (BA)
+            td
+              each part in department.major
+                p #{part.ba}
+          tr
+            td
+              p Major Requirement (BS)
+            td
+              each part in department.major
+                p #{part.bs}
