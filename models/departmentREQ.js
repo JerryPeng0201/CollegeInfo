@@ -7,7 +7,7 @@ var departmentREQSchema = mongoose.Schema( {
     },
     id: {
       type: String,
-    },/*
+    },
     minor: {
       type: [{
         compulsory: String,
@@ -36,7 +36,7 @@ var departmentREQSchema = mongoose.Schema( {
           }]
         }
       }]
-    },*/
+    },
     honors: {
       type: String
     }

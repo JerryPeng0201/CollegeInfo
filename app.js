@@ -229,7 +229,7 @@ function process_request(req, res, next){
       factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
     const current_date = new Date();
-    var term = req.body.queryResult.parameters.term || 1182;
+    var term = req.body.queryResult.parameters.term;
 
     //get term
 
@@ -265,7 +265,7 @@ function process_request(req, res, next){
         })
       },
       function(callback){
-        Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
+        Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
           console.log(course_list);
         })
       }
