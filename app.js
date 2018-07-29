@@ -316,7 +316,6 @@ function process_request(req, res, next){
 
   //term --> get section
 
-<<<<<<< HEAD
   //start & end time --> get section
 
   //section --> get course
@@ -326,9 +325,6 @@ function process_request(req, res, next){
 
 
 
-=======
-//
->>>>>>> f1e2a326f3fe500f3d56ac641c2add26d9d9862f
 
 
 
