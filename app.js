@@ -290,14 +290,16 @@ function process_request(req, res, next){
       function(callback){
         Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
           console.log(course_list);
+
+          callback(null, course_list);
         })
       }
-    ], function(err, num_class){
+    ], function(err, result){
       if(err){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        res.locals.output_string = "There are " + num_class + " classes on "+weekday[d.getDay()];
+        res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
       }
       next();
     })    
