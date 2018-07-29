@@ -229,7 +229,13 @@ function process_request(req, res, next){
       factor = weekday[d.getDay()].substring(0,1).toLowerCase();
     }
     const current_date = new Date();
-    var term = req.body.queryResult.parameters.term || 1182;
+    var term = req.body.queryResult.parameters.Term;
+
+
+    function dateToNumber(date){
+      let convertedTime = date.getMinutes() + date.getHours()*60;
+      return convertedTime;
+    }
 
     //get term
 
@@ -237,21 +243,26 @@ function process_request(req, res, next){
 
     var current_term_code = "";
     var course_id_list = [];
+    var sub_id = "";
     async.series([
       function(callback){
-        Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
-          if(err){
-            console.log(err);
-            callback(err, null);
-          } else if(term_doc.name.includes("Summer")){
-            //change the term to the next one
-            current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
-            callback(null, null);
-          } else {
-            current_term_code = term_doc.id;
-            callback(null, null);
-          }
-        })
+        if(!term){
+          Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+            if(err){
+              console.log(err);
+              callback(err, null);
+            } else if(term_doc.name.includes("Summer")){
+              //change the term to the next one
+              current_term_code = term_doc.id.substring(0, 3) + (parseInt(term_doc.id.substring(3)) + 1);
+              callback(null, null);
+            } else {
+              current_term_code = term_doc.id;
+              callback(null, null);
+            }
+          })
+        } else {
+          callback(null, null);
+        }   
       },
       function(callback){
         const section_id_regex = new RegExp("^" + current_term_code + "-");
@@ -265,6 +276,18 @@ function process_request(req, res, next){
         })
       },
       function(callback){
+        const startTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        const endTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
+        Section.distinct('course', {id: {$in: id_list}, "times.end": {$lte: endTime}, "times.start": {$gte: startTime}}), function(err, id_list){
+          if(err){
+            callback(err, null);
+          }else{
+            course_id_list = id_list;
+            callback(null, null);
+          }
+        }
+      },
+      function(callback){
         Course.find('course',{id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
           console.log(course_list);
         })
@@ -274,7 +297,7 @@ function process_request(req, res, next){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        res.locals.output_string = num_class + " classes on "+weekday[d.getDay()];
+        res.locals.output_string = "There are " + num_class + " classes on "+weekday[d.getDay()];
       }
       next();
     })    
@@ -291,7 +314,15 @@ function process_request(req, res, next){
 
   //term --> get section
 
-//   
+  //start & end time --> get section
+
+  //section --> get course
+
+  //subject --> get course
+
+
+
+
 
 
 
