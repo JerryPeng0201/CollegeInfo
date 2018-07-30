@@ -170,6 +170,18 @@ function replyToDiaf(req, res, next){
 }
 
 
+/*
+ * This part is for the speaking control part.
+ * The speaking control part provides a platform for user to search class database
+ * by spekaing the keyword of the class, like name, time, instructor, etc. We use
+ * DialogFlow to edit the intents and entities to train the system. The user need to
+ * give a sentence first, like "I want to find a class offered by Computer Science Department
+ * from 8 to 10 in the fall semester". The core information is "tiem-period", "department name",
+ * and "term". If the user miss any piece of these information, the system will keep asking
+ * until the user provide all core information.
+ */
+
+ // This function is 
 function process_request(req, res, next){
   console.dir(req.body.queryResult.parameters);
   res.locals.output_string = "there was an error";
@@ -275,7 +287,7 @@ function process_request(req, res, next){
           })
         } else {
           callback(null, null);
-        }   
+        }
       },
       function(callback){
         const section_id_regex = new RegExp("^" + current_term_code + "-");
@@ -343,6 +355,16 @@ function process_request(req, res, next){
             callback(null, null);
             //console.log(course_list_result);
           }
+<<<<<<< HEAD
+=======
+        }
+      },
+      function(callback){
+        Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
+          console.log(course_list);
+
+          callback(null, course_list);
+>>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
         })
       }
     ], function(err, results){
@@ -384,7 +406,10 @@ function process_request(req, res, next){
 
 
 
+<<<<<<< HEAD
 //
+=======
+>>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
 
 
 

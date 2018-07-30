@@ -123,16 +123,14 @@ $(document).ready(function(){
                 <td>
                     <p class="course-enrolled">${waiting}</p>
                 </td>
-                <td>
+                <td> 
                     <p class="course-waiting">${limit}</p>
                 </td>
                 <td>
                     <p><b>Days:</b></p>
                     <p class="course-date">${days}</p>
-                    <p><b>Start From:</b></p>
-                    <p class="course-start">${start}</p>
-                    <p><b>End At:</b></p>
-                    <p class="course-end">${end}</p>
+                    <p class="course-start">${start} - ${end}</p>
+
                 </td>
                 <td>
                     <p><b>Building:</b></p>
