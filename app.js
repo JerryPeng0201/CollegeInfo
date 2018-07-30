@@ -183,7 +183,7 @@ function replyToDiaf(req, res, next){
 
  // This function is
 function process_request(req, res, next){
-  console.dir(req.body);
+  console.dir(req.body.queryResult.parameters);
   res.locals.output_string = "there was an error";
   var temp = "";
   console.log("in the processing")
@@ -249,17 +249,30 @@ function process_request(req, res, next){
       return convertedTime;
     }
 
+    function numberToString(minutes){
+      let convertedTimeString;
+      if (minutes % 60 ==0){
+        convertedTimeString = minutes/60 + ":00";
+      }else{
+        convertedTimeString = minutes/60 + ":" + "minutes%60";
+      }
+      return convertedTimeString;
+    }
+
     //get term
 
     //term --> get section
-
     var current_term_code = "";
     var course_id_list = [];
     var sub_id = "";
+    var course_list_result = "";
+    var converted_Time_String_Start = "";
+    var converted_Time_String_End = "";
     async.series([
       function(callback){
         if(!term){
           Term.findOne({start: {$lte: current_date}, end: {$gte: current_date}}, function(err, term_doc){
+            console.log("term_doc: "+term_doc)
             if(err){
               console.log(err);
               callback(err, null);
@@ -278,7 +291,50 @@ function process_request(req, res, next){
       },
       function(callback){
         const section_id_regex = new RegExp("^" + current_term_code + "-");
-        Section.distinct('course', {"times.days":factor, id: {$regex: section_id_regex}}, function(err, id_list){
+
+        const section_query = {
+          "times.days":factor, 
+          id: {$regex: section_id_regex},
+        };
+
+        if(req.body.queryResult.parameters["time-period"]){
+          console.log("We're in time period function!")
+          let time_period = req.body.queryResult.parameters["time-period"];
+          let startTime = dateToNumber(new Date(time_period.startTime));
+          let endTime = dateToNumber(new Date(time_period.endTime));
+          if (startTime <480 && endTime <480){
+            startTime +=720;
+            endTime += 720;
+            console.log("startTime: "+startTime);
+          }else if (startTime >=1290 && endTime>1290){
+            startTime -= 720;
+            endTime -=720;
+          }
+
+          converted_Time_String_Start = numberToString(new Number(startTime));
+          converted_Time_String_End = numberToString(new Number(endTime));
+          console.log(converted_Time_String_Start);
+          console.log(converted_Time_String_End);
+
+          section_query["times.end"] = {$lte: endTime};
+          section_query["times.start"] = {$gte: startTime};
+        } 
+
+        if(req.body.queryResult.parameters["Subject"]){
+          console.log("We're in the subject function")
+          //console.log("subject: "+req.body.queryResult.parameters["Subject"])
+          var sub_name = req.body.queryResult.parameters["Subject"];
+          Subject.findOne({name: sub_name}, 'id', function(err, subject_id){
+            if(err){
+              console.log(err);
+            }else if(subject_id){
+              sub_id = subject_id;
+              console.log("subject id: " + sub_id);
+            }
+          })
+        }
+
+        Section.distinct('course', section_query, function(err, id_list){
           if(err){
             callback(err, null);
           } else {
@@ -288,15 +344,19 @@ function process_request(req, res, next){
         })
       },
       function(callback){
-        const startTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
-        const endTime = dateToNumber(req.body.queryResult.parameters.time-period.startTime);
-        Section.distinct('course', {id: {$in: id_list}, "times.end": {$lte: endTime}, "times.start": {$gte: startTime}}), function(err, id_list){
+        //console.log("course_id_list"+course_id_list);
+        //console.log("subject_id: " + sub_id.id)
+        const sub_regex = new RegExp(sub_id.id.substring(sub_id.id.indexOf("-") + 1) + "$");
+        Course.find({id: {$in: course_id_list}, "subjects.id": {$regex: sub_regex}}, function(err, course_list){
           if(err){
             callback(err, null);
           }else{
-            course_id_list = id_list;
+            course_list_result = course_list;
             callback(null, null);
+            //console.log(course_list_result);
           }
+<<<<<<< HEAD
+=======
         }
       },
       function(callback){
@@ -304,21 +364,30 @@ function process_request(req, res, next){
           console.log(course_list);
 
           callback(null, course_list);
+>>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
         })
       }
-    ], function(err, result){
+    ], function(err, results){
       if(err){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        res.locals.output_string = "There are " + result.length + " classes on "+weekday[d.getDay()];
+        console.log(course_list_result);
+        let time_period = req.body.queryResult.parameters["time-period"];
+        
+        res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] + 
+        " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End + 
+        " for you! ";
       }
       next();
     })
-  } else {
-    console.log("else");
+  } else if (req.body.queryResult.intent.displayName == "who_designed") {
     res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
+  } else if(req.body.queryResult.intent.displayName == "help"){
+    res.locals.output_string = "You can say something like \"Which classes are offered by Computer Science Department from 8 to 11 am on Wednesday?\" ";
+  } else {
+    res.locals.output_string = "Oops, something went wrong... Could you please rephrase your request? You can say \"help\" for detailed support";
   }
 }
 
@@ -337,6 +406,10 @@ function process_request(req, res, next){
 
 
 
+<<<<<<< HEAD
+//
+=======
+>>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
 
 
 
