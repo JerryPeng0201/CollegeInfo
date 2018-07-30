@@ -181,9 +181,9 @@ function replyToDiaf(req, res, next){
  * until the user provide all core information.
  */
 
- // This function is
+ // This function processes the request and return the right respond
 function process_request(req, res, next){
-  console.dir(req.body.queryResult.parameters);
+  //console.dir(req.body.queryResult.parameters);
   res.locals.output_string = "there was an error";
   var temp = "";
   console.log("in the processing")
@@ -207,6 +207,8 @@ function process_request(req, res, next){
       keycode = session.user_id;
     }
   })
+
+  //============================================================================
 
   console.log("before if");
 
@@ -293,7 +295,7 @@ function process_request(req, res, next){
         const section_id_regex = new RegExp("^" + current_term_code + "-");
 
         const section_query = {
-          "times.days":factor, 
+          "times.days":factor,
           id: {$regex: section_id_regex},
         };
 
@@ -318,7 +320,7 @@ function process_request(req, res, next){
 
           section_query["times.end"] = {$lte: endTime};
           section_query["times.start"] = {$gte: startTime};
-        } 
+        }
 
         if(req.body.queryResult.parameters["Subject"]){
           console.log("We're in the subject function")
@@ -355,16 +357,15 @@ function process_request(req, res, next){
             callback(null, null);
             //console.log(course_list_result);
           }
-<<<<<<< HEAD
-=======
-        }
+
+        })
       },
       function(callback){
         Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
           console.log(course_list);
 
           callback(null, course_list);
->>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
+
         })
       }
     ], function(err, results){
@@ -374,9 +375,9 @@ function process_request(req, res, next){
       } else {
         console.log(course_list_result);
         let time_period = req.body.queryResult.parameters["time-period"];
-        
-        res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] + 
-        " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End + 
+
+        res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
+        " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End +
         " for you! ";
       }
       next();
@@ -406,10 +407,7 @@ function process_request(req, res, next){
 
 
 
-<<<<<<< HEAD
-//
-=======
->>>>>>> 2e7ee2b4cc4f58eb5e05ca50aae3450d9aa14425
+
 
 
 
