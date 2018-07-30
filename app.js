@@ -256,7 +256,7 @@ function process_request(req, res, next){
       if (minutes % 60 ==0){
         convertedTimeString = minutes/60 + ":00";
       }else{
-        convertedTimeString = minutes/60 + ":" + "minutes%60";
+        convertedTimeString = Math.floor(minutes/60) + ":" + minutes%60;
       }
       return convertedTimeString;
     }
@@ -270,6 +270,7 @@ function process_request(req, res, next){
     var course_list_result = "";
     var converted_Time_String_Start = "";
     var converted_Time_String_End = "";
+    var courseBrief = "";
     async.series([
       function(callback){
         if(!term){
@@ -304,50 +305,64 @@ function process_request(req, res, next){
           let time_period = req.body.queryResult.parameters["time-period"];
           let startTime = dateToNumber(new Date(time_period.startTime));
           let endTime = dateToNumber(new Date(time_period.endTime));
-          if (startTime <480 && endTime <480){
-            startTime +=720;
-            endTime += 720;
-            console.log("startTime: "+startTime);
-          }else if (startTime >=1290 && endTime>1290){
-            startTime -= 720;
-            endTime -=720;
+
+          function process_time(time){
+            if(time > 1200){
+              return time -= 720;
+            } else if(time < 480){
+              return time += 720;
+            } else {
+              return time;
+            }
+          }
+          var processed_startTime = process_time(startTime);
+          var processed_endTime = process_time(endTime);
+
+          if(processed_endTime > processed_startTime) {
+            var temp = processed_endTime;
+            processed_endTime = processed_startTime;
+            processed_startTime = temp;
           }
 
-          converted_Time_String_Start = numberToString(new Number(startTime));
-          converted_Time_String_End = numberToString(new Number(endTime));
+          if(processed_endTime < processed_startTime){
+            converted_Time_String_Start = numberToString(new Number(processed_endTime));
+            converted_Time_String_End = numberToString(new Number(processed_startTime));
+          } else {
+            converted_Time_String_Start = numberToString(new Number(processed_startTime));
+            converted_Time_String_End = numberToString(new Number(processed_endTime));
+          }
+
           console.log(converted_Time_String_Start);
           console.log(converted_Time_String_End);
 
-          section_query["times.end"] = {$lte: endTime};
-          section_query["times.start"] = {$gte: startTime};
+          section_query["times.end"] = {$lte: processed_endTime};
+          section_query["times.start"] = {$gte: processed_startTime};
         }
 
         if(req.body.queryResult.parameters["Subject"]){
           console.log("We're in the subject function")
           //console.log("subject: "+req.body.queryResult.parameters["Subject"])
           var sub_name = req.body.queryResult.parameters["Subject"];
-          Subject.findOne({name: sub_name}, 'id', function(err, subject_id){
+          console.log("sub_name: "+sub_name);
+          Subject.findOne({name: sub_name}, 'id', function(err, subject_doc){
             if(err){
               console.log(err);
-            }else if(subject_id){
-              sub_id = subject_id;
+            }else if(subject_doc){
+              sub_id = subject_doc;
               console.log("subject id: " + sub_id);
+              Section.distinct('course', section_query, function(err, id_list){
+                if(err){
+                  callback(err, null);
+                } else {
+                  course_id_list = id_list;
+                  callback(null, null);
+                }
+              })
             }
           })
         }
-
-        Section.distinct('course', section_query, function(err, id_list){
-          if(err){
-            callback(err, null);
-          } else {
-            course_id_list = id_list;
-            callback(null, null);
-          }
-        })
       },
       function(callback){
-        //console.log("course_id_list"+course_id_list);
-        //console.log("subject_id: " + sub_id.id)
         const sub_regex = new RegExp(sub_id.id.substring(sub_id.id.indexOf("-") + 1) + "$");
         Course.find({id: {$in: course_id_list}, "subjects.id": {$regex: sub_regex}}, function(err, course_list){
           if(err){
@@ -357,15 +372,6 @@ function process_request(req, res, next){
             callback(null, null);
             //console.log(course_list_result);
           }
-
-        })
-      },
-      function(callback){
-        Course.find({id: {$in: id_list}, "subject.id": sub_id}, function(err, course_list){
-          console.log(course_list);
-
-          callback(null, course_list);
-
         })
       }
     ], function(err, results){
@@ -373,12 +379,26 @@ function process_request(req, res, next){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        console.log(course_list_result);
-        let time_period = req.body.queryResult.parameters["time-period"];
+        console.log('***** about to print the result')
+        console.dir(course_list_result);
+        for (index=0; index<course_list_result.length; index++){
+          courseBrief += course_list_result[index].code + "-" + course_list_result[index].name + "\n";
+        }
+        console.log("courseBreif: " + courseBrief)
+        if (req.body.queryResult.parameters["time-period"]){
+          res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
+          " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End +
+          " for you! " + "\n"
+          + "They are: " + "\n" +
+          courseBrief;
+        }else{
+          res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
+          " from " + "8:00" + " to 21:30" +
+          " for you! " + "\n"
+          + "They are: " + "\n" +
+          courseBrief;
+        }
 
-        res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
-        " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End +
-        " for you! ";
       }
       next();
     })
@@ -540,7 +560,32 @@ app.get('/profile', isLoggedIn, function(req, res){
 })
 
 app.post('/update_keycode', isLoggedIn, function(req, res){
-  const keycode = req.body.keycode;
+  const keycode = req.body.keycode.toLowerCase();
+
+  var checkWord = require('check-word'),
+      words     = checkWord('en');
+
+  if(typeof keycode != 'string'){
+    res.status(400);
+    res.json({message: "Please enter a valid keycode."});
+    return;
+  }
+
+  if(keycode.trim().length == 0){
+    res.status(400);
+    res.json({message: "Please enter a keycode."});
+    return;
+  }
+
+  const word_list = keycode.split(/ +/);
+  for(var i = 0; i < word_list.length; i++){
+    if(!word_list[i]) continue;
+    if(!words.check(word_list[i].toLowerCase())){
+      res.status(400);
+      res.json({message: "Please enter a readable keycode."});
+      return;
+    }
+  }
 
   User.findOne({keycode: keycode}, function(err, doc){
     if(err){
@@ -552,7 +597,7 @@ app.post('/update_keycode', isLoggedIn, function(req, res){
           res.json({});
         } else {
           res.status(400);
-          res.json({message: "Keycode used."});
+          res.json({message: `Keycode has been used.`});
         }
       } else {
         User.findById(req.user._id, function(err, user_doc){
