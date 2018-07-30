@@ -1,7 +1,5 @@
 $(document).ready(function(){
   $("button#submit-keycode").on('click', function(event){
-    console.log("hey!")
-
     const keycode = $("input#keycode").val();
     $.ajax({
       url: "/update_keycode",
@@ -13,8 +11,14 @@ $(document).ready(function(){
         $("#keycode-alert-success").css("display", "block");
         setTimeout(function(){$("#keycode-alert-success").css("display", "none")}, 3000);
       },
-      error: function(){
-        $("#keycode-alert-warn").css("display", "block");
+      error: function(err){
+        $("#keycode-alert-warn").text("This keycode has been used!");
+        if(err.responseJSON){
+          if(err.responseJSON.message){
+            $("#keycode-alert-warn").text(err.responseJSON.message);
+          }
+        } 
+        $("#keycode-alert-warn").css("display", "block");   
         setTimeout(function(){$("#keycode-alert-warn").css("display", "none")}, 3000);
       },
     })
