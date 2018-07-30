@@ -181,7 +181,7 @@ function replyToDiaf(req, res, next){
  * until the user provide all core information.
  */
 
- // This function is 
+ // This function is
 function process_request(req, res, next){
   console.dir(req.body);
   res.locals.output_string = "there was an error";
@@ -357,7 +357,7 @@ app.post('/get_section_data', isLoggedIn, api_controller.get_section_data_post);
 app.post('/delete_section_data', isLoggedIn, api_controller.delete_section_data);
 app.use('/team', teamRouter)
 app.use('/footer-terms', footertermsRouter)
-app.use('/BrandeisMajorSearch', brandeisMajorSearchRouter)
+app.use('/BrandeisMajorSearch', isLoggedIn, brandeisMajorSearchRouter)
 
 app.get('/addposts', isLoggedIn,function(req,res){
  console.log("adding posts")
