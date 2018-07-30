@@ -12,8 +12,7 @@ var departmentREQSchema = mongoose.Schema( {
       type: [{
         compulsory: String,
         electives: String,
-        grade: String,
-        pass: String,
+        requirements: String,
         comment: String
       }]
     },
@@ -30,8 +29,7 @@ var departmentREQSchema = mongoose.Schema( {
           type: [{
             compulsory: String,
             electives: String,
-            grade: String,
-            pass: String,
+            requirements: String,
             comment: String
           }]
         }

@@ -2,5 +2,9 @@
   {
     "name": "Computer Science",
     "id": "cs-1000"
+  },
+  {
+    "name": "Biology",
+    "id": "bio-1000"
   }
 ]

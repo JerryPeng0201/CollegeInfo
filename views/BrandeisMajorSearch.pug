@@ -26,25 +26,52 @@ block content
         each department in result
           tr
             th
-              | &nbsp
-            th
               | #{department.name}
+            th
+              | Compulsory Courses
+            th
+              | Elective Courses
+            th
+              | Comment
+            th
+              | Grade & Pass
       tbody
         each department in result
           tr
-            td
+            th
               p Minor Requirement
-            td
-              p #{department.minor}
+            each part in department.minor
+              td
+                p #{part.compulsory}
+              td
+                p #{part.electives}
+              td
+                p #{part.comment}
+              td
+                p #{part.requirements}
           tr
-            td
-              p Major Requirement (BA)
-            td
-              each part in department.major
-                p #{part.ba}
+            each part in department.major
+              th
+                p Major Requirement (BA)
+              each ba in part.ba
+                td
+                  p #{ba.compulsory}
+                td
+                  p #{ba.electives}
+                td
+                  p #{ba.comment}
+                td
+                  p #{ba.requirements}
           tr
-            td
-              p Major Requirement (BS)
-            td
-              each part in department.major
-                p #{part.bs}
+            each part in department.major
+              th
+                p Major Requirement (BS)
+              each bs in part.bs
+                td
+                  p #{bs.compulsory}
+                td
+                  p #{bs.electives}
+                td
+                  p #{bs.comment}
+                td
+                  p #{bs.requirements}
