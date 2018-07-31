@@ -423,7 +423,7 @@ function process_request(req, res, next){
       }
       next();
     })
-  }else if (req.body.intent.displayName == "help"){
+  }else if (req.body.queryResult.intent.displayName == "help"){
     res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
     "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
     "If you want to add certain course to schedule, search for the course that meets your requirements, then in the result list, specify the course or say something like \"add the first course to my schedule\""+ "\n"+
