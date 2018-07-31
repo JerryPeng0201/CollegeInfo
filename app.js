@@ -194,36 +194,178 @@ function process_request(req, res, next){
   console.dir(session);
   console.log("before user find one");
   //if getKeycode
-  let keycode = 0;
-  /*
-   * This part is keycode identification. The user need to say his or her own special
-   * keycode to authorized it. The keycode could be created on GUI page.
-   */
+  //let keycode = 0;
 
-   if(req.body.queryResult.intent.displayName == "schedule"){
+   var list = ""
+   // Run this part of code when the intent is "how_many_class_I_have"
+   if(req.body.queryResult.intent.displayName == "how_many_class_I_have"){
+     /*
+      * This part is keycode identification. The user need to say his or her own special
+      * keycode to authorized it. The keycode could be created on GUI page. When the users
+      * is trying to access his or her own schedule and market Database, he or she will be
+      * required to provide keycode; The part of codes on following is the functions require
+      * authentication
+      */
+     const keycode = req.body.queryResult.parameters.keycode;
      User.findOne({keycode: keycode}, function(err, user_doc){
        if(err){
-         res.status(err.status || 500);
-         res.json(err);
+         res.locals.output_string = "There are errors courses";
+         next();
+         return;
        } else {
          if(user_doc){
            session.user_id = user_doc._id;
          } else {
            session.user_id = 0;
+           //tell the user he doesn't have an account yet
+           res.locals.output_string = "There are errors courses";
+           next();
+           return;
          }
-         keycode = session.user_id;
-         console.log("keycode-check: " + keycode);
+         var user_id = session.user_id;
+         console.log("user_id-check: " + user_id);
 
-         Schedule.find({'creator': keycode}, 'section_list', function(err, total_section){
-           console.log("total_section: " + total_section);
+         // use the keycode to locate the user's information and find user's section_list
+         Schedule.findOne({'creator': user_id}, 'section_list', function(err, schedule_doc){
+           console.log("total_section: " + schedule_doc);
            if(err){
              console.log(err);
-           }else if(total_section.length == 0){
-             res.locals.output_string = "You didn't add any class";
+             res.locals.output_string = "There are errors courses";
+             next();
+             return;
+           }else if(!schedule_doc){
+             session.section_list = 0;
+             //tell user he doesn't have a scheldule
+             res.locals.output_string = "There are errors courses";
+             next();
+             return;
            }else{
-             res.locals.output_string = "You have " + total_section.length + "classs";
+             session.section_list = schedule_doc.section_list;
+
+             //"How many classes i need to take for this semester?"
+             if(req.body.queryResult.parameters['semester']){
+               if(session.section_list){
+                 Section.find({_id:{$in:session.section_list}}, 'times course id', function(err, section_list){
+                   if(err){
+                     res.locals.output_string = "There are errors courses";
+                     next();
+                     return;
+                   }else if(section_list.length != 0){
+                     console.log(secition_info);
+                     // create an array to store information in section_info, which is an array object
+                     var section_info_course = [];
+                     for(var i = 0; i<section_info.length; i++){
+                       section_info_course.push(section_info[i].course);
+                     }
+                     //Find the courses via section_info.course id
+                     Course.find({id:{$in:section_info_course}}, 'name code id', function(err, course_list){
+                       if(err){
+                         res.locals.output_string = "There are errors courses";
+                         next();
+                         return;
+                       }else if(course_list){
+                         const class_detail_name = [];
+                         for(var i = 0; i< course_list.length; i++){
+                           class_detail_name.push(course_list[i].name)
+                         }
+                         res.locals.output_string = "You have " + section_info.length + " sections in this semester. The courses' names are " + class_detail_name;
+                       }
+                     })//Course.find
+                   }//else if(section_info)
+                 })//Section.find
+               }
+             } else if(req.body.queryResult.parameters['date']){ // "How many classes i have on Monday?"
+               if(session.section_list){
+                 Section.find({_id:{$in:section_list}}, 'times course id', function(err, section_info){
+                   if(err){
+                     res.locals.output_string = "There are errors courses";
+                     next();
+                     return;
+                   }else if(section_info){
+                     console.log(secition_info);
+
+                     //get the date that the user wants to check
+                     const day = req.body.queryResult.parameters['date'];
+                     console.log("The date is " + day);
+                     var Dday = new Date(day);
+                     console.log("the day is "+Dday);
+                     let day_code = "";
+                     const today = new Date(); //get today
+
+                     // change the date to lower case code so that we can compare it with the database
+                     if (Dday.getDay() == 2 || Dday.getDay() == 4){
+                       day_code = weekday[Dday.getDay()].substring(0,2).toLowerCase();
+                     }else{
+                       day_code = weekday[Dday.getDay()].substring(0,1).toLowerCase();
+                     }
+
+                     const class_detail = [];
+                     for(var i = 0; i < section_info.length; i++){
+                       if(day_code == section_info[i].times.days){
+                         class_detail.push(section_info[i].course)
+                       }
+                     }
+
+                     //find those section's course name
+                     Course.find({id:{$in:class_detail}}, 'name code id', function(err, course_doc){
+                       if(err){
+                         res.locals.output_string = "There are errors courses";
+                         next();
+                         return;
+                       }else if(course_doc.length!=0){
+                         const class_detail_name = [];
+                         for(var i = 0; i< course_doc.length; i++){
+                           class_detail_name.push(course_doc[i].name)
+                         }
+                         res.locals.output_string = "On " + day + ", you have " + class_detail.length + "classes. The courses' names are " + class_detail_name;
+                       }
+                     })
+
+
+                   }//else if(section_info)
+                 })//Section.find
+               }
+             }else if(req.body.queryResult.parameters['d']){//"What is my next class?"
+               if(session.section_list){
+                 var today = new Date(); //get today
+                 var current_timeHours = today.getHours();
+                 var current_timeMinutes = today.getMinutes();
+                 var current_timeNumber = timeHours*60 + timeMinutes;
+
+                 Section.find({_id:{$in:section_list}}, 'times course id', function(err,section_doc){
+                   if(err){
+                     res.locals.output_string = "There are errors courses";
+                     next();
+                     return;
+                   }else if(section_doc.length!=0){
+                     const next_class = [];
+                     for(var i = 0; i < section_doc.length; i++){
+                       if(current_timeNumber < section_doc[i].times.start){
+                         next_class.push(section_doc[i])
+                       }
+                     }//for loop
+
+                     //find the course name;
+                     Course.find({id:{$in:next_class}}, 'name code id', function(err, next_course){
+                       if(err){
+                         res.locals.output_string = "There are errors courses";
+                         next();
+                         return;
+                       }else if(next_class.length!=0){
+                         res.locals.output_string = "Your next class is " + next_course.name;
+                       }
+
+                     })// Course.find
+                   }
+                 })//Section.find
+               }
+
+
+             }
+
            }
          })//Schedule.find
+
 
        }
      })//User.findOne

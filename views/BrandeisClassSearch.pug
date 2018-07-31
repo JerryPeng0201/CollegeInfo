@@ -80,7 +80,7 @@ block content
             b Section Information
           p  (Click the section to add it to your schedule)
 
-          table#sectionDetail.table.table-bordered.table-hover
+          table#sectionDetail.table.table-bordered
             thead.thead-light
               tr.confirm
                 th
@@ -99,6 +99,7 @@ block content
                   | Schedule
                 th
                   |Location
+
             tbody.section-table
               tr.loading
                 td
@@ -118,6 +119,6 @@ block content
                 td
                   p Loading...
 
+
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button#addClass.btn.btn-primary(type='submit') Add to My Schedule
