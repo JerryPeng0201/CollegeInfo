@@ -380,11 +380,11 @@ function process_request(req, res, next){
         res.locals.output_string = "Something went wrong...";
       } else {
         console.log('***** about to print the result')
-        console.dir(course_list_result);
+        console.log(course_list_result);
         for (index=0; index<course_list_result.length; index++){
           courseBrief += course_list_result[index].code + "-" + course_list_result[index].name + "\n";
         }
-        console.log("courseBreif: " + courseBrief)
+        console.log("courseBreif: " + courseBrief);
         if (req.body.queryResult.parameters["time-period"]){
           res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
           " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End +
