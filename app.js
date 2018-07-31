@@ -183,6 +183,7 @@ function replyToDiaf(req, res, next){
  */
 
  // This function processes the request and return the right respond
+let sessions = {};
 function process_request(req, res, next){
   //console.dir(req.body.queryResult.parameters);
   res.locals.output_string = "there was an error";
@@ -392,6 +393,7 @@ function process_request(req, res, next){
             callback(err, null);
           }else{
             course_list_result = course_list;
+            session.course_list_result = course_list_result;
             callback(null, null);
             //console.log(course_list_result);
           }
@@ -457,16 +459,6 @@ function process_request(req, res, next){
   //subject --> get course
 //======================================= Dialogflow Ends =====================================
 
-
-
-
-
-
-
-
-
-
-let sessions = {};
 
 app.post('/hook', process_request, replyToDiaf);
 
