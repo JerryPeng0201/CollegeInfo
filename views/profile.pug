@@ -1,14 +1,59 @@
 extends layoutBSBrandeis
 
-block head 
+block head
   script(src="/javascripts/profile.js")
 
 block content
-  div.alert.alert-warning#keycode-alert-warn(role="alert" style="display:none") This keycode has been used!
-  div.alert.alert-info#keycode-alert-success(role="alert" style="display:none") Your keycode has been updated!
+  #welcomePage.carousel.slide.text-entered(data-ride='carousel')
+    .carousel-inner
+      .carousel-item.active
+        img.d-block.w-100(src='./images/voice.jpeg', alt='First slide')
 
-  div.form-inline
-    div.form-group
-      label(for="keycode") Keycode
-      input#keycode.form-control(placeholder="Enter your keycode here..." value= user.keycode)
-    button.btn.btn-primary#submit-keycode Submit
+  p &nbsp
+
+  form
+    .form-row
+      .form-group
+        .card(style='width: 40rem; height: 50rem')
+          img.rounded-circle.card-img-top(src='./images/sylvia.jpeg', style='width: 30rem; height: 30rem')
+          .card-body
+            p &nbsp
+            h5.card-title What is Sylvia?
+            #sylviaCard1.p.card-text
+              p &nbsp&nbsp&nbsp&nbsp Sylvia is an cute artificial intelligent 'housekeeper' bases on speech recognition. She can help you find any class you need, and build you your personal schedule. She knows everything about Brandeis classes and can tell you details.
+              p &nbsp&nbsp&nbsp&nbsp We hope Sylvia can help students to manage their schedule better and get all information they need with very simple click. We believe she can facilitate students' college lives significantly and become their friend.
+
+      p &nbsp&nbsp&nbsp&nbsp
+
+      .form-group.col-lg-5
+        .card(style='width: 55rem; height: 34rem')
+          .card-body
+            h5.card-title How to use Sylvia?
+            #sylviaCard1.p.card-text
+              p
+                b - Get Google Assistant!
+              p &nbsp&nbsp&nbsp&nbsp We use Google Assistant as a platform of Sylvia. In order to activate Sylvia, you need to download the Google Assistant and Log in.
+              p
+                b - Identify Yourself!
+              p &nbsp&nbsp&nbsp&nbsp Then you need to identify yourself to Sylvia so that she can be your private secretary. You need to create a readable key code as your voice codeword. You need to say your key code to her every time before you want her to check your personal information.
+              p
+                b - Ask a Question!
+              p After identifying yourself, you can ask Sylvia to get you some information or build your own schedule! Give her an order and she will provide all detail information you want to know!
+
+        br
+
+        .card(style='width: 55rem; height: 15rem')
+          .card-body
+            h5.card-title Get Start it with Create Your Keycode!
+            #sylviaCard1.p.card-text
+              p The key code must be an readable word!
+              br
+              div.alert.alert-warning#keycode-alert-warn(role="alert" style="display:none") This keycode has been used!
+              div.alert.alert-info#keycode-alert-success(role="alert" style="display:none") Your keycode has been updated!
+
+              div.form-inline
+                div.form-group
+                  label(for="keycode") Keycode:
+                  p &nbsp&nbsp
+                  input#keycode.form-control(placeholder="Enter your keycode here..." value= user.keycode)
+                button.btn.btn-primary#submit-keycode Submit
