@@ -102,7 +102,9 @@ router.get('/', function(req, res, next) {
         })//Section.find
 
 
-    }//else if(result)
+    } else {
+      res.render('BrandeisClassSchedule', { title: 'Brandeis' }); //each 
+    }
   })//Schedule.findOne
 
 
