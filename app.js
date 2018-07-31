@@ -371,7 +371,7 @@ function process_request(req, res, next){
      })//User.findOne
    }
 
-  //============================================================================
+  //==================================== Dialogflow ========================================
 
   console.log("before if");
 
@@ -498,8 +498,8 @@ function process_request(req, res, next){
           console.log(converted_Time_String_Start);
           console.log(converted_Time_String_End);
 
-          section_query["times.end"] = {$lte: processed_endTime};
-          section_query["times.start"] = {$gte: processed_startTime};
+          section_query["times.end"] = {$gte: processed_endTime};
+          section_query["times.start"] = {$lte: processed_startTime};
         }
 
         if(req.body.queryResult.parameters["Subject"]){
@@ -507,6 +507,7 @@ function process_request(req, res, next){
           //console.log("subject: "+req.body.queryResult.parameters["Subject"])
           var sub_name = req.body.queryResult.parameters["Subject"];
           console.log("sub_name: "+sub_name);
+          console.log(section_query);
           Subject.findOne({name: sub_name}, 'id', function(err, subject_doc){
             if(err){
               console.log(err);
@@ -518,6 +519,7 @@ function process_request(req, res, next){
                   callback(err, null);
                 } else {
                   course_id_list = id_list;
+                  console.log(id_list)
                   callback(null, null);
                 }
               })
@@ -565,13 +567,15 @@ function process_request(req, res, next){
       }
       next();
     })
-  } else if (req.body.queryResult.intent.displayName == "help"){
-      res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
-      "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
-      "If you want to add certain course to schedule, search for the course that meets your requirements, then in the result list, specify the course or say something like \"add the first course to my schedule\""+ "\n"+
-      "If your want to find out your own schedule, say something like \"What's my next course?\", or \"What's my schedule today\" " + "\n" +
-      "To get access to the full functions on your own schedule operation, please login to our website https://college-info.herokuapp.com , where you can create your own unique keycode for this voice version of CollegeInfo Bot, explore more features we have. If you want to have a visual version of your current schedule, please go to https://college-info.herokuapp.com as well." ;
-      next();
+  // } else if (req.body.queryResult.intent.displayName == "which_classes_at_time.detail"){
+  //   res.locals.output_string = "We have found "
+  }else if (req.body.queryResult.intent.displayName == "help"){
+    res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
+    "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
+    "If you want to add certain course to schedule, search for the course that meets your requirements, then in the result list, specify the course or say something like \"add the first course to my schedule\""+ "\n"+
+    "If your want to find out your own schedule, say something like \"What's my next course?\", or \"What's my schedule today\" " + "\n" +
+    "To get access to the full functions on your own schedule operation, please login to our website https://college-info.herokuapp.com , where you can create your own unique keycode for this voice version of CollegeInfo Bot, explore more features we have. If you want to have a visual version of your current schedule, please go to https://college-info.herokuapp.com as well." ;
+    next();
   } else if (req.body.queryResult.intent.displayName == "who_designed") {
     res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
@@ -593,7 +597,7 @@ function process_request(req, res, next){
   //section --> get course
 
   //subject --> get course
-
+//======================================= Dialogflow Ends =====================================
 
 
 
