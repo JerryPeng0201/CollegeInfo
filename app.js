@@ -328,9 +328,16 @@ function process_request(req, res, next){
              }else if(req.body.queryResult.parameters['d']){//"What is my next class?"
                if(session.section_list){
                  var today = new Date(); //get today
+                 //var current_day = today.getDay();
                  var current_timeHours = today.getHours();
                  var current_timeMinutes = today.getMinutes();
                  var current_timeNumber = timeHours*60 + timeMinutes;
+
+                 if (today.getDay() == 2 || today.getDay() == 4){
+                   day_code = weekday[today.getDay()].substring(0,2).toLowerCase();
+                 }else{
+                   day_code = weekday[today.getDay()].substring(0,1).toLowerCase();
+                 }
 
                  Section.find({_id:{$in:section_list}}, 'times course id', function(err,section_doc){
                    if(err){
@@ -341,7 +348,9 @@ function process_request(req, res, next){
                      const next_class = [];
                      for(var i = 0; i < section_doc.length; i++){
                        if(current_timeNumber < section_doc[i].times.start){
-                         next_class.push(section_doc[i])
+                         if(day_code == section_doc[i].times.days[i]){
+                           next_class.push(section_doc[i])
+                         }
                        }
                      }//for loop
 
@@ -351,8 +360,12 @@ function process_request(req, res, next){
                          res.locals.output_string = "There are errors courses";
                          next();
                          return;
-                       }else if(next_class.length!=0){
-                         res.locals.output_string = "Your next class is " + next_course.name;
+                       }else if(next_course.length!=0){
+                         const course_name = [];
+                         for(var i = 0; i<next_class.length; i++){
+                           course_name.push(next_course[i].name);
+                         }
+                         res.locals.output_string = "Your next class is " + course_name;
                        }
 
                      })// Course.find
