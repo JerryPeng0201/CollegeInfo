@@ -21,6 +21,9 @@ html
             a.nav-link(href='/BrandeisHome')
               | Home
               span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='/profile')
+              | Sylvia
           li.nav-item.dropdown
             a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | Class-Assistant
@@ -43,7 +46,7 @@ html
                 | Post Your Products
               a.dropdown-item(href='/myPosts')
                 | Check Your Products
-              
+
           li.nav-item.dropdown
             a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | Groups
@@ -52,6 +55,7 @@ html
                 | Group List
               a.dropdown-item(href='/chatroom')
                 | Enter a Chatroom
+
 
       form.form-inline.my-2.my-lg-0
         a.btn.btn-danger(href="/logout")

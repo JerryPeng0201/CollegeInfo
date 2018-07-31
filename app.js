@@ -32,22 +32,23 @@ configPassport(passport);
 var app = express();
 // app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var brandeisHomeRouter = require('./routes/BrandeisHome');
-var brandeisClassScheduleRouter = require('./routes/BrandeisClassSchedule');
-var brandeisClassSearchRouter = require('./routes/BrandeisClassSearch');
-var addpostsRouter = require('./routes/addposts');
-var postsController = require('./controllers/postsController');
-var contactsController = require('./controllers/contactsController');
-var teamRouter = require('./routes/team');
-var footertermsRouter = require('./routes/footer-terms');
-var api_controller = require('./controllers/api.js');
-var brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
-var Group = require('./models/group.js');
-var Subject = require('./models/subject');
-var Term = require('./models/term');
-var Course = require('./models/course');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const brandeisHomeRouter = require('./routes/BrandeisHome');
+const brandeisClassScheduleRouter = require('./routes/BrandeisClassSchedule');
+const brandeisClassSearchRouter = require('./routes/BrandeisClassSearch');
+const addpostsRouter = require('./routes/addposts');
+const postsController = require('./controllers/postsController');
+const contactsController = require('./controllers/contactsController');
+const teamRouter = require('./routes/team');
+const footertermsRouter = require('./routes/footer-terms');
+const api_controller = require('./controllers/api.js');
+const brandeisMajorSearchRouter = require('./routes/BrandeisMajorSearch')
+const Group = require('./models/group.js');
+const Subject = require('./models/subject');
+const Term = require('./models/term');
+const Course = require('./models/course');
+const Schedule = require('./models/schedule');
 
 
 //Test whether the mongoose database can work
@@ -194,19 +195,39 @@ function process_request(req, res, next){
   console.log("before user find one");
   //if getKeycode
   let keycode = 0;
-  User.findOne({keycode: keycode}, function(err, user_doc){
-    if(err){
-      res.status(err.status || 500);
-      res.json(err);
-    } else {
-      if(user_doc){
-        session.user_id = user_doc._id;
-      } else {
-        session.user_id = 0;
-      }
-      keycode = session.user_id;
-    }
-  })
+  /*
+   * This part is keycode identification. The user need to say his or her own special
+   * keycode to authorized it. The keycode could be created on GUI page.
+   */
+
+   if(req.body.queryResult.intent.displayName == "schedule"){
+     User.findOne({keycode: keycode}, function(err, user_doc){
+       if(err){
+         res.status(err.status || 500);
+         res.json(err);
+       } else {
+         if(user_doc){
+           session.user_id = user_doc._id;
+         } else {
+           session.user_id = 0;
+         }
+         keycode = session.user_id;
+         console.log("keycode-check: " + keycode);
+
+         Schedule.find({'creator': keycode}, 'section_list', function(err, total_section){
+           console.log("total_section: " + total_section);
+           if(err){
+             console.log(err);
+           }else if(total_section.length == 0){
+             res.locals.output_string = "You didn't add any class";
+           }else{
+             res.locals.output_string = "You have " + total_section.length + "classs";
+           }
+         })//Schedule.find
+
+       }
+     })//User.findOne
+   }
 
   //============================================================================
 

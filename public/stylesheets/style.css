@@ -21,6 +21,7 @@ nav#welcomePage{
   height: 80px;
   margin-top: -40px;
   font-family: serif;
+  z-index: 1;
 }
 
 h20 {
@@ -66,6 +67,17 @@ h1 {
   color: white;
 }
 
+h5.card-title {
+  font-family: serif;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+#sylviaCard1 {
+  font-family: serif;;
+  font-size: 25px;
+}
+
 #teamIN.p {
   font-size: 1.5em;
   font-family: serif;
@@ -107,6 +119,7 @@ a.navbar-brand{
   background: none;
   margin-left: -50px;
   margin-right: -50px;
+
 }
 
 #brandeisPage.carousel {
