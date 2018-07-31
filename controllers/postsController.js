@@ -5,13 +5,13 @@ console.log("Item-Post Controller Normal")
 exports.myPosts = (req, res) => {
   Posts.find({pid: req.user._id}, function(err, post_list){
     if(err){
-
+      console.log(err);
     } else {
       if(post_list.length == 0){
         res.json({err: "Not found."})
-      } else {
+      } else if(post_list){
         res.render('myPosts', {posts: post_list});
-      }
+      } 
     }
   })
 }
@@ -32,9 +32,7 @@ exports.getAllPosts = ( req, res ) => {
     Posts.find( {} )
       .exec()
       .then( ( posts ) => {
-        res.render( 'posts', {
-          posts: posts
-        } );
+        res.render( 'posts', { posts: posts } );
       } )
       .catch( ( error ) => {
         console.log( error.message );
