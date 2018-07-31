@@ -403,7 +403,7 @@ function process_request(req, res, next){
         console.log('***** about to print the result')
         console.log(course_list_result);
         for (index=0; index<course_list_result.length; index++){
-          courseBrief += course_list_result[index].code + "-" + course_list_result[index].name + "\n";
+          courseBrief += index+1 + ". " + course_list_result[index].code + "-" + course_list_result[index].name + "\n";
         }
         console.log("courseBreif: " + courseBrief);
         if (req.body.queryResult.parameters["time-period"]){
@@ -423,12 +423,13 @@ function process_request(req, res, next){
       }
       next();
     })
-  }else if (req.body.queryResult.intent.displayName == "help"){
-    res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
-    "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
-    "If you want to add certain course to schedule, search for the course that meets your requirements, then in the result list, specify the course or say something like \"add the first course to my schedule\""+ "\n"+
-    "If your want to find out your own schedule, say something like \"What's my next course?\", or \"What's my schedule today\" " + "\n" +
-    "To get access to the full functions on your own schedule operation, please login to our website https://college-info.herokuapp.com , where you can create your own unique keycode for this voice version of CollegeInfo Bot, explore more features we have. If you want to have a visual version of your current schedule, please go to https://college-info.herokuapp.com as well." ;
+  } else if (req.body.queryResult.intent.displayName == "help"){
+      res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
+      "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
+      "If you want to add certain course to schedule, search for the course that meets your requirements, then in the result list, specify the course or say something like \"add the first course to my schedule\""+ "\n"+
+      "If your want to find out your own schedule, say something like \"What's my next course?\", or \"What's my schedule today\" " + "\n" +
+      "To get access to the full functions on your own schedule operation, please login to our website https://college-info.herokuapp.com , where you can create your own unique keycode for this voice version of CollegeInfo Bot, explore more features we have. If you want to have a visual version of your current schedule, please go to https://college-info.herokuapp.com as well." ;
+      next();
   } else if (req.body.queryResult.intent.displayName == "who_designed") {
     res.locals.output_string = "Jierui Peng, Jialin Zhou, and Xuxin Zhang";
     next();
