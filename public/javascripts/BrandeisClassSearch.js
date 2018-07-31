@@ -110,6 +110,7 @@ $(document).ready(function(){
           const tr = `<tr section_id=${id} class="sectionInfo" > section_details
                 <td>
                     <p class="course-section">${id.substring(id.indexOf("-")+1)}</p>
+                    <button class="btn btn-primary" type="submit">Add to schedule</button>
                 </td>
                 <td>
                     <p class="course-instructors">${instructors}</p>
@@ -123,7 +124,7 @@ $(document).ready(function(){
                 <td>
                     <p class="course-enrolled">${waiting}</p>
                 </td>
-                <td> 
+                <td>
                     <p class="course-waiting">${limit}</p>
                 </td>
                 <td>

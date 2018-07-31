@@ -17,7 +17,7 @@ block content
     hr
 
     if list
-      table#sectionSchedule.table.table-bordered.table-hover
+      table#sectionSchedule.table.table-bordered
         thead.thead-light
           tr.confirm
             th
@@ -38,6 +38,8 @@ block content
               | Schedule
             th
               | Location
+            th
+              | Delete
 
         tbody.section-form
           each section in list
@@ -68,6 +70,9 @@ block content
                     p.section-room #{day.room}
                   else
                     p TBD
+              td
+                button.btn.btn-primary(type='submit' href='/BrandeisClassSchedule') Delete
+
 
 
     p &nbsp
