@@ -792,7 +792,7 @@ function process_request(req, res, next){
       }
     }
   } else if (req.body.queryResult.intent.displayName == "which_classes_at_time_detail_section_add"){
-    const keycode = req.body.queryResult.parameters.keycode;
+    const keycode = req.body.queryResult.parameters.keycode.toLowerCase();
     const section_index = req.body.queryResult.parameters.detail_index - 1;
 
     if(!keycode){
