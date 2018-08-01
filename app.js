@@ -217,10 +217,6 @@ function process_request(req, res, next){
   sessions[req.body.session]= sessions[req.body.session] || {};
   //console.dir(sessions);
   let session = sessions[req.body.session];
-  //console.dir(session);
-  console.log("current_intent");
-  console.log(req.body.queryResult.intent.displayName);
-   
 
   //==================================== Dialogflow ========================================
   var list = ""
@@ -278,7 +274,7 @@ function process_request(req, res, next){
                      res.locals.output_string = "There are errors courses";
                      next();
                      return;
-                   }else if(section_list.length != 0){           
+                   }else if(section_list.length != 0){
                      // create an array to store information in section_info, which is an array object
                      var section_info_course = [];
                      for(var i = 0; i<section_list.length; i++){
@@ -318,6 +314,7 @@ function process_request(req, res, next){
                      console.log("the day is "+Dday);
                      let day_code = "";
                      const today = new Date(); //get today
+                     //var current_date = today.getDay();
 
                      // change the date to lower case code so that we can compare it with the database
                      if (Dday.getDay() == 2 || Dday.getDay() == 4){
@@ -327,7 +324,7 @@ function process_request(req, res, next){
                      }
 
                      const class_detail = [];
-                     for(var i = 0; i < section_list.length; i++){        
+                     for(var i = 0; i < section_list.length; i++){
                        for(var time of section_list[i].times){
                          for(var _day of time.days){
                           if(day_code == _day){
@@ -397,7 +394,7 @@ function process_request(req, res, next){
                      if(next_class.length == 0){
                        res.locals.output_string = "You have no more class today.";
                        next();
-                       return; 
+                       return;
                      }
                      //find the course name;
                      Course.find({id:{$in:next_class}}, 'name code id', function(err, next_course){
@@ -426,6 +423,7 @@ function process_request(req, res, next){
                next();
                return;
              }
+
 
            }
          })//Schedule.find
@@ -616,7 +614,58 @@ function process_request(req, res, next){
           + "They are: " + "\n" +
           courseBrief;
         }
+/*
+        Schedule.findOne({'creator': req.user._id}, function(err, section_final){
+          if(err){
+            res.locals.output_string = "There are errors courses";
+            next();
+            return;
+          } else {
+            if(section_final){ //{$push:{section_list: section_obj._id}}
+              console.log("Find the creator, detecting")
+              console.log("final: "+section_final);
+              console.log("result: "+section_result)
+              //const section_list = section_final.section_list;
+              //check exists
+              for(i = 0; i<section_final.section_list.length; i++){
+                if(section_result._id.toString() == section_final.section_list[i]){
+                  console.log("Detected the same section")
+                  res.locals.output_string = "This section is in your schedule now";
+                  return;
+                }
+              } //for loop
 
+              Schedule.update({'creator': req.user._id}, {$push:{section_list: section_result._id}}, function(err, result){
+                if(err){
+                  res.locals.output_string = "There are errors courses";
+                  next();
+                  return;
+                }else if(result){
+                  console.log("Updating the new section")
+                  res.locals.output_string = "The section information has been updated successfully";
+                }
+              })
+            }else{
+                const new_schedule = new Schedule({
+                  creator: req.user._id,
+                  section_list: [section_result._id]
+                })
+
+                new_schedule.save(function(err, result){
+                  console.log("Saving the section, pending...")
+                  if(err){
+                    res.locals.output_string = "There are errors courses";
+                    next();
+                    return;
+                  }else if(result){
+                    console.log("Result: "+result)
+                    res.locals.output_string = "This section is in your schedule now";
+                  }
+              })
+            }
+          } //else statement
+        })
+*/
       }
       next();
     })
@@ -626,14 +675,14 @@ function process_request(req, res, next){
 
     let courseDetail = "";
     let detail_index = req.body.queryResult.parameters["index"] - 1;
-    courseDetail+= session.course_list_result[detail_index].code + " - " + session.course_list_result[detail_index].name + "\n" 
+    courseDetail+= session.course_list_result[detail_index].code + " - " + session.course_list_result[detail_index].name + "\n"
       + "requirements: " + session.course_list_result[detail_index].requirements + "\n"
       + "course description: " + session.course_list_result[detail_index].description +"\n"
       + "Say \"show me the sections\" to see the available sections that match your request."
 
     res.locals.output_string = courseDetail;
     session.checked_course = session.course_list_result[detail_index];
-    next();  
+    next();
   } else if(req.body.queryResult.intent.displayName == "which_classes_at_time_detail_section"){
     console.log("We're in which_classes_at_time_detail_section!")
     //check data
@@ -728,13 +777,13 @@ function process_request(req, res, next){
                   index++;
                 }
 
-                res.locals.output_string = 'Here are the sections I found: ' 
+                res.locals.output_string = 'Here are the sections I found: '
                   + final_output
                   + " If you want to add any of the sections to your schedule, you can say \"add the first\".";
                 session.found_sections = processed_section_result;
                 next();
               }
-            }) 
+            })
           }
         })
       }
@@ -747,12 +796,12 @@ function process_request(req, res, next){
       res.locals.output_string = "Please say your keycode.";
       next();
       return;
-    } 
+    }
 
     if(!session || !session.course_list_result){
       res.locals.output_string = "You haven't searched any course yet. For example, say \"which math courses are on Monday from 2 to 3\".";
       next();
-    } 
+    }
 
     if(!session.checked_course) {
       res.locals.output_string = "You didn't choose any course from the search result. For example, say \"show me the details of number one\".";
