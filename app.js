@@ -602,6 +602,7 @@ function process_request(req, res, next){
           courseBrief += index+1 + ". " + course_list_result[index].code + "-" + course_list_result[index].name + "\n";
         }
         console.log("courseBreif: " + courseBrief);
+        courseBrief += " .You can say \"tell me more about the first one\" to check course details."
         if (req.body.queryResult.parameters["time-period"]){
           res.locals.output_string = "We have found " + course_list_result.length + " classes offered by " + req.body.queryResult.parameters["Subject"]+ " Department" +" on "+weekday[d.getDay()] +
           " from " + converted_Time_String_Start + ":" + " to " + converted_Time_String_End +
