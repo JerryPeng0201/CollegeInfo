@@ -197,7 +197,12 @@ function process_request(req, res, next){
   //if getKeycode
   //let keycode = 0;
 
-   var list = ""
+
+
+  //==================================== Dialogflow ========================================
+
+  console.log("before if");
+  var list = ""
    // Run this part of code when the intent is "how_many_class_I_have"
    if(req.body.queryResult.intent.displayName == "how_many_class_I_have"){
      /*
@@ -208,6 +213,7 @@ function process_request(req, res, next){
       * authentication
       */
      const keycode = req.body.queryResult.parameters.keycode;
+     console.log(keycode);
      User.findOne({keycode: keycode}, function(err, user_doc){
        if(err){
          res.locals.output_string = "There are errors courses";
@@ -228,7 +234,7 @@ function process_request(req, res, next){
 
          // use the keycode to locate the user's information and find user's section_list
          Schedule.findOne({'creator': user_id}, 'section_list', function(err, schedule_doc){
-           console.log("total_section: " + schedule_doc);
+           console.log("schedule: " + schedule_doc);
            if(err){
              console.log(err);
              res.locals.output_string = "There are errors courses";
@@ -252,11 +258,10 @@ function process_request(req, res, next){
                      next();
                      return;
                    }else if(section_list.length != 0){
-                     console.log(secition_info);
                      // create an array to store information in section_info, which is an array object
                      var section_info_course = [];
-                     for(var i = 0; i<section_info.length; i++){
-                       section_info_course.push(section_info[i].course);
+                     for(var i = 0; i<section_list.length; i++){
+                       section_info_course.push(section_list[i].course);
                      }
                      //Find the courses via section_info.course id
                      Course.find({id:{$in:section_info_course}}, 'name code id', function(err, course_list){
@@ -269,7 +274,8 @@ function process_request(req, res, next){
                          for(var i = 0; i< course_list.length; i++){
                            class_detail_name.push(course_list[i].name)
                          }
-                         res.locals.output_string = "You have " + section_info.length + " sections in this semester. The courses' names are " + class_detail_name;
+                         res.locals.output_string = "You have " + section_list.length + " sections in this semester. The courses' names are " + class_detail_name;
+                          next();
                        }
                      })//Course.find
                    }//else if(section_info)
@@ -277,14 +283,12 @@ function process_request(req, res, next){
                }
              } else if(req.body.queryResult.parameters['date']){ // "How many classes i have on Monday?"
                if(session.section_list){
-                 Section.find({_id:{$in:section_list}}, 'times course id', function(err, section_info){
+                 Section.find({_id:{$in:session.section_list}}, 'times course id', function(err, section_list){
                    if(err){
                      res.locals.output_string = "There are errors courses";
                      next();
                      return;
-                   }else if(section_info){
-                     console.log(secition_info);
-
+                   }else if(section_list){
                      //get the date that the user wants to check
                      const day = req.body.queryResult.parameters['date'];
                      console.log("The date is " + day);
@@ -302,12 +306,20 @@ function process_request(req, res, next){
                      }
 
                      const class_detail = [];
-                     for(var i = 0; i < section_info.length; i++){
-                       if(day_code == section_info[i].times.days){
-                         class_detail.push(section_info[i].course)
+                     for(var i = 0; i < section_list.length; i++){
+                       for(var time of section_list[i].times){
+                         for(var _day of time.days){
+                          if(day_code == _day){
+                            class_detail.push(section_list[i].course)
+                          }
+                         }
                        }
                      }
-
+                     if(class_detail.length == 0){
+                       res.locals.output_string = "You don't have any classes on that day.";
+                       next();
+                       return;
+                     }
                      //find those section's course name
                      Course.find({id:{$in:class_detail}}, 'name code id', function(err, course_doc){
                        if(err){
@@ -320,6 +332,7 @@ function process_request(req, res, next){
                            class_detail_name.push(course_doc[i].name)
                          }
                          res.locals.output_string = "On " + day + ", you have " + class_detail.length + "classes. The courses' names are " + class_detail_name;
+                         next();
                        }
                      })
 
@@ -327,13 +340,13 @@ function process_request(req, res, next){
                    }//else if(section_info)
                  })//Section.find
                }
-             }else if(req.body.queryResult.parameters['d']){//"What is my next class?"
+             }else if(req.body.queryResult.parameters['Next']){//"What is my next class?"
                if(session.section_list){
                  var today = new Date(); //get today
                  //var current_day = today.getDay();
                  var current_timeHours = today.getHours();
                  var current_timeMinutes = today.getMinutes();
-                 var current_timeNumber = timeHours*60 + timeMinutes;
+                 var current_timeNumber = current_timeHours*60 + current_timeMinutes;
 
                  if (today.getDay() == 2 || today.getDay() == 4){
                    day_code = weekday[today.getDay()].substring(0,2).toLowerCase();
@@ -341,21 +354,29 @@ function process_request(req, res, next){
                    day_code = weekday[today.getDay()].substring(0,1).toLowerCase();
                  }
 
-                 Section.find({_id:{$in:section_list}}, 'times course id', function(err,section_doc){
+                 Section.find({_id:{$in:session.section_list}}, 'times course id', function(err,section_list){
                    if(err){
                      res.locals.output_string = "There are errors courses";
                      next();
                      return;
-                   }else if(section_doc.length!=0){
+                   }else if(section_list.length!=0){
                      const next_class = [];
-                     for(var i = 0; i < section_doc.length; i++){
-                       if(current_timeNumber < section_doc[i].times.start){
-                         if(day_code == section_doc[i].times.days[i]){
-                           next_class.push(section_doc[i])
-                         }
-                       }
+                     for(var i = 0; i < section_list.length; i++){
+                      for(time of section_list[i].times){
+                        if(current_timeNumber < time.start){
+                          for(day of time.days){
+                            if(day_code == day){
+                              next_class.push(section_list[i].course);
+                            }
+                          }
+                        }
+                      }
                      }//for loop
-
+                     if(next_class.length == 0){
+                       res.locals.output_string = "You have no more class today.";
+                       next();
+                       return;
+                     }
                      //find the course name;
                      Course.find({id:{$in:next_class}}, 'name code id', function(err, next_course){
                        if(err){
@@ -368,12 +389,18 @@ function process_request(req, res, next){
                            course_name.push(next_course[i].name);
                          }
                          res.locals.output_string = "Your next class is " + course_name;
+                         next();
                        }
 
                      })// Course.find
                    }
                  })//Section.find
                }
+
+
+             } else {
+               res.locals.output_string = "Something went wrong.";
+               next();
              }
 
 
@@ -383,13 +410,7 @@ function process_request(req, res, next){
 
        }
      })//User.findOne
-   }
-
-  //==================================== Dialogflow ========================================
-
-  console.log("before if");
-
-  if(req.body.queryResult.intent.displayName == "how_many_total"){
+   }else if(req.body.queryResult.intent.displayName == "how_many_total"){
     console.log("how many triggered");
     Section.count()
       .exec()
@@ -578,12 +599,68 @@ function process_request(req, res, next){
           + "They are: " + "\n" +
           courseBrief;
         }
+/*
+        Schedule.findOne({'creator': req.user._id}, function(err, section_final){
+          if(err){
+            res.locals.output_string = "There are errors courses";
+            next();
+            return;
+          } else {
+            if(section_final){ //{$push:{section_list: section_obj._id}}
+              console.log("Find the creator, detecting")
+              console.log("final: "+section_final);
+              console.log("result: "+section_result)
+              //const section_list = section_final.section_list;
+              //check exists
+              for(i = 0; i<section_final.section_list.length; i++){
+                if(section_result._id.toString() == section_final.section_list[i]){
+                  console.log("Detected the same section")
+                  res.locals.output_string = "This section is in your schedule now";
+                  return;
+                }
+              } //for loop
 
+              Schedule.update({'creator': req.user._id}, {$push:{section_list: section_result._id}}, function(err, result){
+                if(err){
+                  res.locals.output_string = "There are errors courses";
+                  next();
+                  return;
+                }else if(result){
+                  console.log("Updating the new section")
+                  res.locals.output_string = "The section information has been updated successfully";
+                }
+              })
+            }else{
+                const new_schedule = new Schedule({
+                  creator: req.user._id,
+                  section_list: [section_result._id]
+                })
+
+                new_schedule.save(function(err, result){
+                  console.log("Saving the section, pending...")
+                  if(err){
+                    res.locals.output_string = "There are errors courses";
+                    next();
+                    return;
+                  }else if(result){
+                    console.log("Result: "+result)
+                    res.locals.output_string = "This section is in your schedule now";
+                  }
+              })
+            }
+          } //else statement
+        })
+*/
       }
       next();
     })
   // } else if (req.body.queryResult.intent.displayName == "which_classes_at_time.detail"){
   //   res.locals.output_string = "We have found "
+  }else if (req.body.queryResult.intent.displayName == "which_classes_at_time.detail"){
+    for (index=0; index<session.course_list.length; index++){
+      req.body.queryResult.parameters["detail_index"];
+    }
+
   }else if (req.body.queryResult.intent.displayName == "help"){
     res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
     "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
