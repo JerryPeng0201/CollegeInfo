@@ -614,58 +614,6 @@ function process_request(req, res, next){
           + "They are: " + "\n" +
           courseBrief;
         }
-/*
-        Schedule.findOne({'creator': req.user._id}, function(err, section_final){
-          if(err){
-            res.locals.output_string = "There are errors courses";
-            next();
-            return;
-          } else {
-            if(section_final){ //{$push:{section_list: section_obj._id}}
-              console.log("Find the creator, detecting")
-              console.log("final: "+section_final);
-              console.log("result: "+section_result)
-              //const section_list = section_final.section_list;
-              //check exists
-              for(i = 0; i<section_final.section_list.length; i++){
-                if(section_result._id.toString() == section_final.section_list[i]){
-                  console.log("Detected the same section")
-                  res.locals.output_string = "This section is in your schedule now";
-                  return;
-                }
-              } //for loop
-
-              Schedule.update({'creator': req.user._id}, {$push:{section_list: section_result._id}}, function(err, result){
-                if(err){
-                  res.locals.output_string = "There are errors courses";
-                  next();
-                  return;
-                }else if(result){
-                  console.log("Updating the new section")
-                  res.locals.output_string = "The section information has been updated successfully";
-                }
-              })
-            }else{
-                const new_schedule = new Schedule({
-                  creator: req.user._id,
-                  section_list: [section_result._id]
-                })
-
-                new_schedule.save(function(err, result){
-                  console.log("Saving the section, pending...")
-                  if(err){
-                    res.locals.output_string = "There are errors courses";
-                    next();
-                    return;
-                  }else if(result){
-                    console.log("Result: "+result)
-                    res.locals.output_string = "This section is in your schedule now";
-                  }
-              })
-            }
-          } //else statement
-        })
-*/
       }
       next();
     })
@@ -842,7 +790,7 @@ function process_request(req, res, next){
                     res.locals.output_string = "It's already in your schedule. You're all set.";
                     next();
                     return;
-                  } 
+                  }
                 }
 
                 schedule_doc.section_list.push(new_section_id);
