@@ -49,6 +49,7 @@ const Subject = require('./models/subject');
 const Term = require('./models/term');
 const Course = require('./models/course');
 const Schedule = require('./models/schedule');
+const Instructor = require("./models/instructor");
 
 
 //Test whether the mongoose database can work
@@ -157,7 +158,7 @@ app.get('/BrandeisHome', isLoggedIn, function(req, res) {
     });
 });
 
-function replyToDiaf(req, res, next){
+function replyToDiaf(req, res){
   // console.dir(req.body)
   return res.json({
       "fulfillmentMessages": [],
@@ -184,24 +185,44 @@ function replyToDiaf(req, res, next){
 
  // This function processes the request and return the right respond
 let sessions = {};
+
+function dayShortToDayLong(day){
+  if(day == 'm') return "Monday";
+  if(day == 'tu') return "Tuesday";
+  if(day == 'w') return "Wednesday";
+  if(day == 'th') return "Thursday";
+  if(day == 'f') return "Friday";
+}
+
+function dateToNumber(date){
+  let convertedTime = date.getMinutes() + date.getHours()*60;
+  return convertedTime;
+}
+
+function numberToString(minutes){
+  let convertedTimeString;
+  if (minutes % 60 ==0){
+    convertedTimeString = minutes/60 + ":00";
+  }else{
+    convertedTimeString = Math.floor(minutes/60) + ":" + minutes%60;
+  }
+  return convertedTimeString;
+}
+
 function process_request(req, res, next){
   //console.dir(req.body.queryResult.parameters);
   res.locals.output_string = "there was an error";
   var temp = "";
   console.log("in the processing")
   sessions[req.body.session]= sessions[req.body.session] || {};
-  console.dir(sessions);
+  //console.dir(sessions);
   let session = sessions[req.body.session];
-  console.dir(session);
-  console.log("before user find one");
-  //if getKeycode
-  //let keycode = 0;
-
+  //console.dir(session);
+  console.log("current_intent");
+  console.log(req.body.queryResult.intent.displayName);
    
 
   //==================================== Dialogflow ========================================
-
-  console.log("before if");
   var list = ""
    // Run this part of code when the intent is "how_many_class_I_have"
    if(req.body.queryResult.intent.displayName == "how_many_class_I_have"){
@@ -276,6 +297,7 @@ function process_request(req, res, next){
                          }
                          res.locals.output_string = "You have " + section_list.length + " sections in this semester. The courses' names are " + class_detail_name;
                           next();
+                          return;
                        }
                      })//Course.find
                    }//else if(section_info)
@@ -332,6 +354,7 @@ function process_request(req, res, next){
                          }
                          res.locals.output_string = "On " + day + ", you have " + class_detail.length + "classes. The courses' names are " + class_detail_name;
                          next();
+                         return;
                        }
                      })
 
@@ -389,6 +412,7 @@ function process_request(req, res, next){
                          }
                          res.locals.output_string = "Your next class is " + course_name;
                          next();
+                         return;
                        }
 
                      })// Course.find
@@ -400,6 +424,7 @@ function process_request(req, res, next){
              } else {
                res.locals.output_string = "Something went wrong.";
                next();
+               return;
              }
 
            }
@@ -417,17 +442,25 @@ function process_request(req, res, next){
         res.locals.output_string = "There are " + num + " courses";
         session.department = "all";
         next();
+        return;
       })
       .catch((err) => {
         console.log("err");
         console.dir(err);
         res.locals.output_string = "There was an error.";
         next();
+        return;
       })
   }else if(req.body.queryResult.intent.displayName == "which_classes_at_time"){
     console.log("which classes at time triggered");
     console.dir(req.body);
     const date = req.body.queryResult.parameters['date'];
+    //clear old data
+    if(session){
+      delete session.course_list_result;
+      delete session.section_query;
+      delete session.found_sections;
+    }
     console.log("date = " + date);
     var d = new Date(date);
     console.dir(d);
@@ -440,23 +473,6 @@ function process_request(req, res, next){
     }
     const current_date = new Date();
     var term = req.body.queryResult.parameters.Term;
-
-
-    function dateToNumber(date){
-      let convertedTime = date.getMinutes() + date.getHours()*60;
-      return convertedTime;
-    }
-
-    function numberToString(minutes){
-      let convertedTimeString;
-      if (minutes % 60 ==0){
-        convertedTimeString = minutes/60 + ":00";
-      }else{
-        convertedTimeString = Math.floor(minutes/60) + ":" + minutes%60;
-      }
-      return convertedTimeString;
-    }
-
     //get term
 
     //term --> get section
@@ -535,6 +551,8 @@ function process_request(req, res, next){
           section_query["times.start"] = {$lte: processed_startTime};
         }
 
+        session.section_query = section_query;
+
         if(req.body.queryResult.parameters["Subject"]){
           console.log("We're in the subject function")
           //console.log("subject: "+req.body.queryResult.parameters["Subject"])
@@ -544,6 +562,7 @@ function process_request(req, res, next){
           Subject.findOne({name: sub_name}, 'id', function(err, subject_doc){
             if(err){
               console.log(err);
+              callback(err, null);
             }else if(subject_doc){
               sub_id = subject_doc;
               console.log("subject id: " + sub_id);
@@ -567,9 +586,10 @@ function process_request(req, res, next){
             callback(err, null);
           }else{
             course_list_result = course_list;
-            session.course_list_result = course_list_result;
+            session.course_list_result = course_list;
+            console.log("***********************************************")
+            console.log(session.course_list_result);
             callback(null, null);
-            //console.log(course_list_result);
           }
         })
       }
@@ -578,8 +598,6 @@ function process_request(req, res, next){
         console.log(err);
         res.locals.output_string = "Something went wrong...";
       } else {
-        console.log('***** about to print the result')
-        console.log(course_list_result);
         for (index=0; index<course_list_result.length; index++){
           courseBrief += index+1 + ". " + course_list_result[index].code + "-" + course_list_result[index].name + "\n";
         }
@@ -601,13 +619,213 @@ function process_request(req, res, next){
       }
       next();
     })
-  // } else if (req.body.queryResult.intent.displayName == "which_classes_at_time.detail"){
-  //   res.locals.output_string = "We have found "
-  }else if (req.body.queryResult.intent.displayName == "which_classes_at_time.detail"){
-    for (index=0; index<session.course_list.length; index++){
-      req.body.queryResult.parameters["detail_index"];
+  }else if (req.body.queryResult.intent.displayName == "which_classes_at_time_detail"){
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    console.log(session.course_list_result);
+
+    let courseDetail = "";
+    let detail_index = req.body.queryResult.parameters["index"] - 1;
+    courseDetail+= session.course_list_result[detail_index].code + " - " + session.course_list_result[detail_index].name + "\n" 
+      + "requirements: " + session.course_list_result[detail_index].requirements + "\n"
+      + "course description: " + session.course_list_result[detail_index].description +"\n"
+      + "Say \"show me the sections\" to see the available sections that match your request."
+
+    res.locals.output_string = courseDetail;
+    session.checked_course = session.course_list_result[detail_index];
+    next();  
+  } else if(req.body.queryResult.intent.displayName == "which_classes_at_time_detail_section"){
+    console.log("We're in which_classes_at_time_detail_section!")
+    //check data
+    if(!session || !session.course_list_result){
+      res.locals.output_string = "You haven't searched any course yet. For example, say \"which math courses are on Monday from 2 to 3\".";
+      next();
+    } else {
+      if(!session.checked_course) {
+        res.locals.output_string = "You didn't choose any course from the search result. For example, say \"show me the details of number one\".";
+        next();
+      } else {
+        const course_doc = session.checked_course;
+        const section_query = session.section_query;
+        section_query.course = course_doc.id;
+        //console.log(section_query);
+        Section.find(section_query, function(err, section_list){
+          if(err){
+            res.locals.output_string = "Something went wrong...";
+            console.log(err);
+            next()
+          } else {
+            //find instructor
+            const processed_section_result = [];
+            const instructor_query_list = [];
+            for(let section of section_list){
+              instructor_query_list.push(function(callback){
+                const ins_list = section.instructors;
+                Instructor.find({id: {$in: ins_list}}, function(err, ins_result){
+                  if(err){
+                    callback(err, null);
+                  } else {
+                    const section_obj = section.toJSON({
+                      virtuals: false,
+                      versionKey: false,
+                    })
+
+                    section_obj.instructors = ins_result;
+                    processed_section_result.push(section_obj);
+                    callback(null, null);
+                  }
+                })
+              })
+            }
+
+            async.parallel(instructor_query_list, function(err, result){
+              if(err){
+                res.locals.output_string = "Something went wrong...";
+                console.log(err);
+                next();
+              } else {
+                var index = 1;
+                var final_output = "";
+                for(var section of processed_section_result){
+                  const section_num = section.section;
+                  const ins_name_list = [];
+                  for(var instructor of section.instructors){
+                    ins_name_list.push(`${instructor.first} ${instructor.last}`);
+                  }
+
+                  var section_info = "";
+                  for(var time of section.times){
+                    const days = [];
+                    var day_index = 0;
+                    const day_num_map = {
+                      m: 1,
+                      tu: 2,
+                      w: 3,
+                      th: 4,
+                      f: 5
+                    }
+                    for(var day of time.days.sort(function(a, b){return day_num_map[a] - day_num_map[b]})){
+                      if(day_index == 0){
+                        days.push(dayShortToDayLong(day));
+                      } else if(day_index < time.days.length - 1){
+                        days.push(" " + dayShortToDayLong(day));
+                      } else {
+                        days.push(" and " + dayShortToDayLong(day));
+                      }
+                      day_index++;
+                    }
+
+                    const location = `${time.building} ${time.room}`;
+                    const start_time = numberToString(time.start);
+                    const end_time = numberToString(time.end);
+
+                    const section_output = (!time.building || !time.room)? `On ${days}, from ${start_time} to ${end_time}, but the classroom is to be determined. \n` : `On ${days}, in ${location}, from ${start_time} to ${end_time} \n`;
+                    section_info += section_output;
+                  }
+
+                  const section_info_output = `Section number ${index} is taught by ${ins_name_list}, and its times and locations are the following. ${section_info} \n`;
+                  final_output += section_info_output;
+                  index++;
+                }
+
+                res.locals.output_string = 'Here are the sections I found: ' 
+                  + final_output
+                  + " If you want to add any of the sections to your schedule, you can say \"add the first\".";
+                session.found_sections = processed_section_result;
+                next();
+              }
+            }) 
+          }
+        })
+      }
     }
-    
+  } else if (req.body.queryResult.intent.displayName == "which_classes_at_time_detail_section_add"){
+    const keycode = req.body.queryResult.parameters.keycode;
+    const section_index = req.body.queryResult.parameters.detail_index - 1;
+
+    if(!keycode){
+      res.locals.output_string = "Please say your keycode.";
+      next();
+      return;
+    } 
+
+    if(!session || !session.course_list_result){
+      res.locals.output_string = "You haven't searched any course yet. For example, say \"which math courses are on Monday from 2 to 3\".";
+      next();
+    } 
+
+    if(!session.checked_course) {
+      res.locals.output_string = "You didn't choose any course from the search result. For example, say \"show me the details of number one\".";
+      next();
+      return;
+    }
+
+    if(!session.found_sections){
+      res.locals.output_string = "You didn't search any sections for a course. You can say \"show me the sections\""
+      next();
+      return;
+    }
+
+    User.findOne({keycode: keycode}, function(err, user_doc){
+      if(err){
+        res.locals.output_string = "Something went wrong...";
+        next();
+      } else {
+        if(!user_doc){
+          res.locals.output_string = "I can't find your information, please try again.";
+          next()
+        } else {
+          Schedule.findOne({creator: user_doc._id}, function(err, schedule_doc){
+            if(err){
+              res.locals.output_string = "Something went wrong...";
+              next()
+            } else {
+              if(!session.found_sections[section_index]){
+                res.locals.output_string = "Sorry, I didn't find that section.";
+                next();
+                return;
+              }
+              const new_section_id = session.found_sections[section_index]._id;
+              if(schedule_doc){
+                for(var section_id of schedule_doc.section_list){
+                  if(section_id == new_section_id){
+                    res.locals.output_string = "It's already in your schedule. You're all set.";
+                    next();
+                    break;
+                  } else {
+                    schedule_doc.section_list.push(new_section_id);
+                    schedule_doc.save(function(err){
+                      if(err){
+                        res.locals.output_string = "Something went wrong...";
+                        next();
+                      } else {
+                        res.locals.output_string = "Done! You're all set.";
+                        next();
+                      }
+                    })
+                    break;
+                  }
+                }
+              } else {
+                const new_schedule = new Schedule({
+                  creator: user_doc._id,
+                  section_list: [new_section_id]
+                })
+
+                new_schedule.save(function(err){
+                  if(err){
+                    res.locals.output_string = "Something went wrong...";
+                    next();
+                  } else {
+                    res.locals.output_string = "Done! You're all set.";
+                    next();
+                  }
+                })
+              }
+            }
+          })
+        }
+      }
+    })
   }else if (req.body.queryResult.intent.displayName == "help"){
     res.locals.output_string = "If you want to search for courses that fit your schedule, say something like \"What courses offered by Math Department are from 10 to 2 on Monday?\" "+"\n " +
     "If you want to search for items for sale, please say something like \"Laptop for sale\" " + "\n" +
@@ -620,8 +838,10 @@ function process_request(req, res, next){
     next();
   } else if(req.body.queryResult.intent.displayName == "help"){
     res.locals.output_string = "You can say something like \"Which classes are offered by Computer Science Department from 8 to 11 am on Wednesday?\" ";
+    next();
   } else {
     res.locals.output_string = "Oops, something went wrong... Could you please rephrase your request? You can say \"help\" for detailed support";
+    next();
   }
 }
 
