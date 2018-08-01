@@ -11,6 +11,7 @@ router.post('/', function(req, res, next) {
   console.log(req.body.porigin);
   console.log(req.body.pdes);
   console.log(req.body.pprice);
+  console.log(req.body.pcon);
   res.render('addposts', { title: 'Student Market' });
 });
 

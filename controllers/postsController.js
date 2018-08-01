@@ -8,7 +8,7 @@ exports.myPosts = (req, res) => {
       console.log(err);
     } else {
       if(post_list.length == 0){
-        res.json({err: "Not found."})
+        res.render('myPosts')
       } else if(post_list){
         res.render('myPosts', {posts: post_list});
       } 
@@ -63,6 +63,7 @@ exports.savePosts = ( req, res ) => {
     pdes: req.body.pdes,
     porigin: req.body.porigin,
     pprice: req.body.pprice,
+    pcon: req.body.pcon,
     pid: req.user._id,
   } )
 

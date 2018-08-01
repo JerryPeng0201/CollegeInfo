@@ -6,6 +6,7 @@ var postsSchema = mongoose.Schema( {
     pprice: String,
     porigin: String,
     pdes: String,
+    pcon: String,
     pid: String,
     //dphoto: File,
   } );

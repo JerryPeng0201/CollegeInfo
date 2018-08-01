@@ -8,8 +8,9 @@ block content
 
 
   .flex-container
-    each p in posts
-      div
+    if posts
+      each p in posts
+        div
             img(width="100%" src='http://www.macross2.net/m3/moremecha/swordfishii/swordfishii.gif' alt='Card image cap')
             hp.pliB #{p.pname}
             ul.list-group.list-group-flush
@@ -19,6 +20,11 @@ block content
                 button.btn.btn-primary.delete-button(type="button" doc_id= p._id) Delete
               button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
                 | Details
+
+    else
+      p.hm You don't have any posts yet. Click 
+        a(href="/addposts") here 
+        | to sell some of your items.
 
   #exampleModalLong.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle' aria-hidden='true')
     .modal-dialog(role='document')
