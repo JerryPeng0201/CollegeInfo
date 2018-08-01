@@ -801,6 +801,7 @@ function process_request(req, res, next){
     if(!session || !session.course_list_result){
       res.locals.output_string = "You haven't searched any course yet. For example, say \"which math courses are on Monday from 2 to 3\".";
       next();
+      return;
     }
 
     if(!session.checked_course) {
@@ -837,24 +838,23 @@ function process_request(req, res, next){
               const new_section_id = session.found_sections[section_index]._id;
               if(schedule_doc){
                 for(var section_id of schedule_doc.section_list){
-                  if(section_id == new_section_id){
+                  if(section_id.toString() == new_section_id.toString()){
                     res.locals.output_string = "It's already in your schedule. You're all set.";
                     next();
-                    break;
-                  } else {
-                    schedule_doc.section_list.push(new_section_id);
-                    schedule_doc.save(function(err){
-                      if(err){
-                        res.locals.output_string = "Something went wrong...";
-                        next();
-                      } else {
-                        res.locals.output_string = "Done! You're all set.";
-                        next();
-                      }
-                    })
-                    break;
-                  }
+                    return;
+                  } 
                 }
+
+                schedule_doc.section_list.push(new_section_id);
+                schedule_doc.save(function(err){
+                  if(err){
+                    res.locals.output_string = "Something went wrong...";
+                    next();
+                  } else {
+                    res.locals.output_string = "Done! You're all set.";
+                    next();
+                  }
+                })
               } else {
                 const new_schedule = new Schedule({
                   creator: user_doc._id,
