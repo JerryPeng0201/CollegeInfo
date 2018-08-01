@@ -556,7 +556,6 @@ function process_request(req, res, next){
           //console.log("subject: "+req.body.queryResult.parameters["Subject"])
           var sub_name = req.body.queryResult.parameters["Subject"];
           console.log("sub_name: "+sub_name);
-          console.log(section_query);
           Subject.findOne({name: sub_name}, 'id', function(err, subject_doc){
             if(err){
               console.log(err);
@@ -573,6 +572,10 @@ function process_request(req, res, next){
                   callback(null, null);
                 }
               })
+            } else {
+              res.locals.output_string = "Sorry we can't find the major.";
+              next();
+              return;
             }
           })
         }
@@ -737,7 +740,7 @@ function process_request(req, res, next){
       }
     }
   } else if (req.body.queryResult.intent.displayName == "which_classes_at_time_detail_section_add"){
-    const keycode = req.body.queryResult.parameters.keycode;
+    const keycode = req.body.queryResult.parameters.keycode.toLowerCase();
     const section_index = req.body.queryResult.parameters.detail_index - 1;
 
     if(!keycode){
