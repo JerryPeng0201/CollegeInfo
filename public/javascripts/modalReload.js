@@ -1,9 +1,13 @@
 $(document).ready(function(){
   $("button.detail-button").click(function(event) {
+    console.log("detail clicekd");
+    console.log($(event.currentTarget));
     const pname = event.currentTarget.attributes[1].nodeValue;
     const pdes = event.currentTarget.attributes[2].nodeValue;
+    const pcon = event.currentTarget.attributes[3].nodeValue;
     $("#exampleModalLong .modal-title").text(pname)
-    $("#exampleModalLong .modal-body").text(pdes)
+    $("#exampleModalLong .body1").text(pdes)
+    $("#exampleModalLong .body2").text(pcon)
     $("#exampleModalLong").modal("show"); 
   });
 })
