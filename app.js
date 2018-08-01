@@ -244,7 +244,7 @@ function process_request(req, res, next){
              session.section_list = schedule_doc.section_list;
 
              //"How many classes i need to take for this semester?"
-             if(req.body.queryResult.parameters['semester']){
+             if(req.body.queryResult.parameters['Term']){
                if(session.section_list){
                  Section.find({_id:{$in:session.section_list}}, 'times course id', function(err, section_list){
                    if(err){
@@ -292,6 +292,7 @@ function process_request(req, res, next){
                      console.log("the day is "+Dday);
                      let day_code = "";
                      const today = new Date(); //get today
+                     //var current_date = today.getDay();
 
                      // change the date to lower case code so that we can compare it with the database
                      if (Dday.getDay() == 2 || Dday.getDay() == 4){
@@ -373,9 +374,8 @@ function process_request(req, res, next){
                    }
                  })//Section.find
                }
-
-
              }
+
 
            }
          })//Schedule.find
