@@ -24,23 +24,27 @@ block content
     .flex-container
       each p in posts
         div
-              img(width="100%" src='http://www.macross2.net/m3/moremecha/swordfishii/swordfishii.gif' alt='Card image cap')
-              hp.pliB #{p.pname}
-              ul.list-group.list-group-flush
-                li.pli.list-group-item Type: #{p.porigin}
-                li.pli.list-group-item $#{p.pprice}
-                button.btn.btn-primary.detail-button(title=p.pname, body=p.pdes)
-                  | Details
+          img(width="100%" src='http://www.macross2.net/m3/moremecha/swordfishii/swordfishii.gif' alt='Card image cap')
+          hp.pliB #{p.pname}
+          ul.list-group.list-group-flush
+            li.pli.list-group-item Type: #{p.porigin}
+            li.pli.list-group-item $#{p.pprice}
+            button.btn.btn-primary.detail-button(title= p.pname body= p.pdes contact= p.pcon)
+              | Details
+        
 
     #exampleModalLong.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle' aria-hidden='true')
       .modal-dialog(role='document')
         .modal-content
           .modal-header
-            h5#exampleModalLongTitle.modal-title #{"<p.name>"}
+            h4#exampleModalLongTitle.modal-title #{"<p.name>"}
             button.close(type='button' data-dismiss='modal' aria-label='Close')
             span(aria-hidden='true') &times;
-          .modal-body
-              h5 Description
-              | #{"<p.des>"}
+          .hm.modal-body1
+              h5 Description:
+              p.body1 #{"<p.des>"}
+          .hm.modal-body2
+              h5 Contact:
+              p.body2 #{"<p.con>"}
           .modal-footer
             button.btn.btn-secondary(type='button' data-dismiss='modal') Close
