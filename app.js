@@ -220,7 +220,6 @@ function process_request(req, res, next){
 
   //==================================== Dialogflow ========================================
   var list = ""
-  const keycode = req.body.queryResult.parameters.keycode.toLowerCase();
    // Run this part of code when the intent is "how_many_class_I_have"
    if(req.body.queryResult.intent.displayName == "how_many_class_I_have"){
      /*
@@ -230,6 +229,7 @@ function process_request(req, res, next){
       * required to provide keycode; The part of codes on following is the functions require
       * authentication
       */
+     const keycode = req.body.queryResult.parameters.keycode.toLowerCase();
      console.log(keycode);
      User.findOne({keycode: keycode}, function(err, user_doc){
        if(err){
