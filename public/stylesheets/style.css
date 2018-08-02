@@ -142,6 +142,15 @@ h6 {
   margin-top: -40%;
 }
 
+h6.h {
+  font-size: 8em;
+  font-weight: bold;
+  font-family: serif;
+  margin-top: -40%;
+  color: black;
+}
+
+
 p1 {
   font-size: 3em;
   font-weight: bold;
