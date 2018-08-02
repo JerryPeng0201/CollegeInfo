@@ -229,7 +229,7 @@ function process_request(req, res, next){
       * required to provide keycode; The part of codes on following is the functions require
       * authentication
       */
-     const keycode = req.body.queryResult.parameters.keycode;
+     const keycode = req.body.queryResult.parameters.keycode.toLowerCase();
      console.log(keycode);
      User.findOne({keycode: keycode}, function(err, user_doc){
        if(err){
