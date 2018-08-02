@@ -288,12 +288,19 @@ function process_request(req, res, next){
                          return;
                        }else if(course_list){
                          const class_detail_name = [];
+                         const class_detail_code = []
                          for(var i = 0; i< course_list.length; i++){
                            class_detail_name.push(course_list[i].name)
+                           class_detail_code.push(course_list[i].code)
                          }
-                         res.locals.output_string = "You have " + section_list.length + " sections in this semester. The courses' names are " + class_detail_name;
-                          next();
-                          return;
+                         let courseList = "";
+                         course_result_list = course_list
+                         for (var index=0; index<course_result_list.length; index++){
+                           courseList += index+1 + ". " + class_detail_code[index] + class_detail_name[index] + "\n";
+                         }
+                         res.locals.output_string = "You have " + course_result_list.length + " sections in this semester. The courses' names are " + "\n" + courseList + ". If you want to delete a class, just say Delete the First One";
+                         next();
+                         return;
                        }
                      })//Course.find
                    }//else if(section_info)
