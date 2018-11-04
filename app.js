@@ -184,6 +184,7 @@ function replyToDiaf(req, res){
  */
 
  // This function processes the request and return the right respond
+
 let sessions = {};
 
 function dayShortToDayLong(day){

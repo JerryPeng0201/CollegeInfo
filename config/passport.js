@@ -51,10 +51,10 @@ module.exports = function(passport) {
            //check email domain
            const email = profile.emails[0].value;
            const domain = email.substring(email.indexOf("@") + 1);
-           if(domain!="brandeis.edu"){
-             return done(null, false, { message: 'Please log in with a Brandeis account.' });
-           }
-           
+           //if(domain!="brandeis.edu"){
+             //return done(null, false, { message: 'Please log in with a Brandeis account.' });
+          // }
+
             // try to find the user based on their google id
             User.findOne({ 'googleid' : profile.id }, function(err, user) {
                 if (err)
